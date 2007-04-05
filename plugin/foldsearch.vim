@@ -1,5 +1,5 @@
 " Name: foldsearch.vim
-" Version: $Id: foldsearch.vim,v 1.17 2003/07/30 10:48:25 mb Exp $
+" Version: $Id$
 " Author: Markus Braun
 " Summary: Vim plugin to fold away lines that don't match a search pattern
 " Licence: This program is free software; you can redistribute it and/or
@@ -41,9 +41,9 @@
 "   :Fe            set modified fold options to their previous value
 "
 "   * context can consist of one or two numbers. A 'pure' number defines the
-"     context before and after the pattern. If a number has a '-' prefix, then
-"     it defines only the context before the pattern, if it has a '+' prefix,
-"     then it defines only the contex after a pattern.
+"     context before and after the pattern. If a number has a '-' prefix, 
+"     it defines only the context before the pattern. If it has a '+' prefix,
+"     it defines only the context after a pattern.
 "
 " Mappings:
 "
@@ -55,10 +55,10 @@
 "   <Leader>fe     FoldSearchEnd()
 "
 " Section: Plugin header {{{1
-if (exists("loaded_foldsearch") || &cp)
+if (exists("g:loaded_foldsearch") || &cp)
   finish
 endi
-let loaded_foldsearch = 1
+let g:loaded_foldsearch = "$Revision$"
 
 " Section: Functions {{{1
 " Function: s:FoldCword(...) {{{2
