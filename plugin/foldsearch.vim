@@ -6,6 +6,7 @@
 "          modify it under the terms of the GNU General Public License.
 "          See http://www.gnu.org/copyleft/gpl.txt
 " Section: Documentation {{{1
+"
 " Description:
 "
 "   This plugin provides commands that fold away lines that don't match a
@@ -58,12 +59,14 @@
 "   <Leader>fe     FoldSearchEnd()
 "
 " Section: Plugin header {{{1
+
 if (exists("g:loaded_foldsearch") || &cp)
   finish
 endi
 let g:loaded_foldsearch = "$Revision$"
 
 " Section: Functions {{{1
+
 " Function: s:FoldCword(...) {{{2
 "
 " Search and fold the word under the curser. Accept a optional context argument.
@@ -82,6 +85,7 @@ function! s:FoldCword(...)
   endif
 
 endfunction
+
 " Function: s:FoldSearch(...) {{{2
 "
 " Search and fold the last search pattern. Accept a optional context argument.
@@ -100,6 +104,7 @@ function! s:FoldSearch(...)
   endif
 
 endfunction
+
 " Function: s:FoldPattern(pattern) {{{2
 "
 " Search and fold the given regular expression.
@@ -111,6 +116,7 @@ function! s:FoldPattern(pattern)
   " call the folding function
   call s:FoldSearchDo()
 endfunction
+
 " Function: s:FoldLast(...) {{{2
 "
 " Search and fold the last pattern
@@ -123,6 +129,7 @@ function! s:FoldLast()
   " call the folding function
   call s:FoldSearchDo()
 endfunction
+
 " Function: s:FoldSearchContext(context) {{{2
 "
 " Set the context of the folds to the given value
@@ -166,6 +173,7 @@ function! s:FoldSearchContext(...)
   " call the folding function
   call s:FoldSearchDo()
 endfunction
+
 " Function: s:FoldContextAdd(change) {{{2
 "
 " Change the context of the folds by the given value.
@@ -192,6 +200,7 @@ function! s:FoldContextAdd(change)
   " call the folding function
   call s:FoldSearchDo()
 endfunction
+
 " Function: s:FoldSearchInit() {{{2
 "
 " initialize fold searching for current buffer
@@ -227,6 +236,7 @@ function! s:FoldSearchInit()
   " erase all folds to begin with
   normal zE
 endfunction
+
 " Function: s:FoldSearchDo()  {{{2
 "
 " do the search and folding based on b:foldsearch_pattern and
@@ -287,6 +297,7 @@ function! s:FoldSearchDo()
   normal zz
 
 endfunction
+
 " Function: s:FoldSpell()  {{{2
 "
 " do the search and folding based on spellchecker and
@@ -342,6 +353,7 @@ function! s:FoldSpell()
   normal zz
 
 endfunction
+
 " Function: s:FoldSearchEnd() {{{2
 "
 " End the fold search and restore the saved settings
@@ -386,7 +398,6 @@ command! -nargs=* Fc call s:FoldSearchContext(<f-args>)
 command! -nargs=0 Fi call s:FoldContextAdd(+1)
 command! -nargs=0 Fd call s:FoldContextAdd(-1)
 command! -nargs=0 Fe call s:FoldSearchEnd()
-" }}}
 " Section: Mappings {{{1
 map <Leader>fs :call <SID>FoldSearch()<CR>
 map <Leader>fS :call <SID>FoldSpell()<CR>
@@ -395,5 +406,4 @@ map <Leader>fl :call <SID>FoldLast()<CR>
 map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
 map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
 map <Leader>fe :call <SID>FoldSearchEnd()<CR>
-" }}}
 " vim600:fdm=marker:commentstring="\ %s:
