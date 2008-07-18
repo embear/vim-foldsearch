@@ -43,7 +43,7 @@
 "  
 "   :Fe            set modified fold options to their previous value
 "
-"   * context can consist of one or two numbers. A 'pure' number defines the
+"   * context can consist of one or two numbers. A 'unsigned' number defines the
 "     context before and after the pattern. If a number has a '-' prefix, 
 "     it defines only the context before the pattern. If it has a '+' prefix,
 "     it defines only the context after a pattern.
@@ -115,6 +115,42 @@ function! s:FoldPattern(pattern)
 
   " call the folding function
   call s:FoldSearchDo()
+endfunction
+
+" Function: s:FoldSpell()  {{{2
+"
+" do the search and folding based on spellchecker
+"
+function! s:FoldSpell()
+  " if foldsearch_pattern is not defined, then exit
+  if (!&spell)
+    echo "Spell checking not enabled, ending Foldsearch"
+    return
+  endif
+
+  let b:foldsearch_pattern = ""
+
+  " do the search
+  let lnum = 1
+  while lnum <= line("$")
+    let bad_word = spellbadword(getline(lnum))[0]
+    if bad_word != ''
+      if empty(b:foldsearch_pattern)
+        let b:foldsearch_pattern = bad_word
+      else
+        let b:foldsearch_pattern = b:foldsearch_pattern . "\\|" . bad_word
+      endif
+    endif
+    let lnum = lnum + 1
+  endwhile
+
+  " report if pattern not found and thus no fold created
+  if (empty(b:foldsearch_pattern))
+    echo "No spelling errors found!"
+  else
+    call s:FoldSearchDo()
+  endif
+
 endfunction
 
 " Function: s:FoldLast(...) {{{2
@@ -253,7 +289,7 @@ function! s:FoldSearchDo()
   call s:FoldSearchInit()
 
   " save cursor position
-  let cursorPosition = line(".") . "normal!" . virtcol(".") . "|"
+  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
   " move to the end of the file 
   normal $G
@@ -271,7 +307,7 @@ function! s:FoldSearchDo()
       let fold_created = 1       " at least one fold has been found
     endif
     let line1 = line2 + 1 + b:foldsearch_context_pre + b:foldsearch_context_post " update marker
-    let flags = "W"                 " turn off wrapping
+    let flags = "W"              " turn off wrapping
   endwhile
 
   " now create the last fold which goes to the end of the file.
@@ -283,71 +319,15 @@ function! s:FoldSearchDo()
 
   " report if pattern not found and thus no fold created
   if (pattern_found == 0)
-    echo "Pattern '" . b:foldsearch_pattern . "' not found!"
+    echo "Pattern not found!"
   elseif (fold_created == 0)
-    echo "No folds created for pattern '" . b:foldsearch_pattern . "'"
+    echo "No folds created"
   else
-    echo "Foldsearch done for pattern '" . b:foldsearch_pattern . "'"
+    echo "Foldsearch done"
   endif
 
   " restore position before folding
-  execute cursorPosition
-
-  " make this position the vertical center
-  normal zz
-
-endfunction
-
-" Function: s:FoldSpell()  {{{2
-"
-" do the search and folding based on spellchecker and
-" b:foldsearch_context
-"
-function! s:FoldSpell()
-  " if foldsearch_pattern is not defined, then exit
-  if (!&spell)
-    echo "Spelling not enabled, ending fold search"
-    return
-  endif
-
-  " initialize fold search for this buffer
-  call s:FoldSearchInit()
-
-  let pattern_found = 0      " flag to set when search pattern found
-  let fold_created = 0       " flag to set when a fold is found
-  let flags = "w"            " allow wrapping in the search
-  let line1 =  0             " set marker for beginning of fold
-
-  " do the search
-  let lnum = 1
-  while lnum <= line("$")
-    if spellbadword(getline(lnum))[0] != ''
-      let pattern_found = 1
-      let line2 = lnum - b:foldsearch_context_pre
-      if (line2 - 1 >= line1 && line2 - 1 != 0)
-        execute ":" . line1 . "," . (line2 - 1) . "fold"
-        let fold_created = 1       " at least one fold has been found
-      endif
-      let line1 = line2 + 1 + b:foldsearch_context_pre + b:foldsearch_context_post " update marker
-      let flags = "W"                 " turn off wrapping
-    endif
-    let lnum = lnum + 1
-  endwhile
-
-  " now create the last fold which goes to the end of the file.
-  let  line2 = lnum - 1
-  if (line2  >= line1 && pattern_found == 1)
-    execute ":". line1 . "," . line2 . "fold"
-  endif
-
-  " report if pattern not found and thus no fold created
-  if (pattern_found == 0)
-    echo "No spelling errors found!"
-  elseif (fold_created == 0)
-    echo "No folds created for spelling errors."
-  else
-    echo "Foldsearch done for spelling errors."
-  endif
+  execute cursor_position
 
   " make this position the vertical center
   normal zz
@@ -360,7 +340,7 @@ endfunction
 "
 function! s:FoldSearchEnd()
   " save cursor position
-  let cursorPosition = line(".") . "normal!" . virtcol(".") . "|"
+  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
   if (!exists('b:foldsearch_foldsave'))
     let b:foldsearch_foldsave = 0
@@ -382,7 +362,7 @@ function! s:FoldSearchEnd()
   silent! execute "normal " . foldlevel(line(".")) . "zo"
 
   " restore position before folding
-  execute cursorPosition
+  execute cursor_position
 
   " make this position the vertical center
   normal zz
