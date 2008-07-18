@@ -9,10 +9,10 @@
 "
 " Description:
 "
-"   This plugin provides commands that fold away lines that don't match a
-"   specific search pattern.  This pattern can be the word under the cursor,
-"   the last search pattern or a regular expression. There are also commands
-"   to change the context of the shown lines.
+"   This plugin provides commands that fold away lines that don't match
+"   a specific search pattern.  This pattern can be the word under the cursor,
+"   the last search pattern, a regular expression or spelling errors. There
+"   are also commands to change the context of the shown lines.
 "
 " Installation:
 "
@@ -43,8 +43,8 @@
 "  
 "   :Fe            set modified fold options to their previous value
 "
-"   * context can consist of one or two numbers. A 'unsigned' number defines the
-"     context before and after the pattern. If a number has a '-' prefix, 
+"   * context can consist of one or two numbers. A 'unsigned' number defines
+"     the context before and after the pattern. If a number has a '-' prefix,
 "     it defines only the context before the pattern. If it has a '+' prefix,
 "     it defines only the context after a pattern.
 "
