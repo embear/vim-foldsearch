@@ -395,4 +395,25 @@ map <Leader>fl :call <SID>FoldLast()<CR>
 map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
 map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
 map <Leader>fe :call <SID>FoldSearchEnd()<CR>
+" Section: Menu {{{1
+if has("menu")
+  vnoremenu <script> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
+  noremenu <script> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
+  vnoremenu <script> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
+  noremenu <script> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
+  vnoremenu <script> Plugin.FoldSearch.Context.Show :Fc<CR>
+  noremenu <script> Plugin.FoldSearch.Context.Show :Fc<CR>
+  vnoremenu <script> Plugin.FoldSearch.Pattern.Find :Fp 
+  noremenu <script> Plugin.FoldSearch.Pattern.Find :Fp 
+  vnoremenu <script> Plugin.FoldSearch.Pattern.Last :Fl<CR>
+  noremenu <script> Plugin.FoldSearch.Pattern.Last :Fl<CR>
+  vnoremenu <script> Plugin.FoldSearch.Pattern.Show :FS<CR>
+  noremenu <script> Plugin.FoldSearch.Pattern.Show :FS<CR>
+  vnoremenu <script> Plugin.FoldSearch.Search.Previous :Fs<CR>
+  noremenu <script> Plugin.FoldSearch.Search.Previous :Fs<CR>
+  vnoremenu <script> Plugin.FoldSearch.Search.Word :Fw<CR>
+  noremenu <script> Plugin.FoldSearch.Search.Word :Fw<CR>
+  vnoremenu <script> Plugin.FoldSearch.Options\ Previons :Fe<CR>
+  noremenu <script> Plugin.FoldSearch.Options\ Previons :Fe<CR>
+endif
 " vim600:fdm=marker:commentstring="\ %s:
