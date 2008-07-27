@@ -58,6 +58,11 @@
 "   <Leader>fd     FoldContextAdd(-1)
 "   <Leader>fe     FoldSearchEnd()
 "
+" Variables:
+"
+"   g:foldsearch_highlight
+"     Highlight the pattern used for folding. Defaults to 0.
+"
 " Section: Plugin header {{{1
 
 if (exists("g:loaded_foldsearch") || &cp)
@@ -65,11 +70,15 @@ if (exists("g:loaded_foldsearch") || &cp)
 endi
 let g:loaded_foldsearch = "$Revision$"
 
+if (!exists("g:foldsearch_highlight"))
+  let g:foldsearch_highlight = 0
+endif
+
 " Section: Functions {{{1
 
 " Function: s:FoldCword(...) {{{2
 "
-" Search and fold the word under the curser. Accept a optional context argument.
+" Search and fold the word under the cursor. Accept a optional context argument.
 "
 function! s:FoldCword(...)
   " define the search pattern
@@ -128,7 +137,7 @@ function! s:FoldSpell(...)
     return
   endif
 
-  let b:foldsearch_pattern = ""
+  let b:foldsearch_pattern = ''
 
   " do the search
   let lnum = 1
@@ -136,13 +145,15 @@ function! s:FoldSpell(...)
     let bad_word = spellbadword(getline(lnum))[0]
     if bad_word != ''
       if empty(b:foldsearch_pattern)
-        let b:foldsearch_pattern = bad_word
+        let b:foldsearch_pattern = '\<\(' . bad_word
       else
-        let b:foldsearch_pattern = b:foldsearch_pattern . "\\|" . bad_word
+        let b:foldsearch_pattern = b:foldsearch_pattern . '\|' . bad_word
       endif
     endif
     let lnum = lnum + 1
   endwhile
+  
+  let b:foldsearch_pattern = b:foldsearch_pattern . '\)\>'
 
   " report if pattern not found and thus no fold created
   if (empty(b:foldsearch_pattern))
@@ -297,6 +308,14 @@ function! s:FoldSearchDo()
   " initialize fold search for this buffer
   call s:FoldSearchInit()
 
+  " highlight search pattern if requested
+  if (g:foldsearch_highlight == 1)
+    if (exists("b:foldearch_highlight_id"))
+      matchdelete(b:foldearch_highlight_id)
+    endif
+    let b:foldearch_highlight_id = matchadd("Search", b:foldsearch_pattern)
+  endif
+
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
@@ -362,6 +381,12 @@ function! s:FoldSearchEnd()
     call delete(b:foldsearch_viewfile)
     let &viewoptions = b:foldsearch_viewoptions
 
+  endif
+
+  " delete highlighting 
+  if (exists("b:foldearch_highlight_id"))
+    call matchdelete(b:foldearch_highlight_id)
+    unlet b:foldearch_highlight_id
   endif
 
   " give a message to the user
