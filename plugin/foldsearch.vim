@@ -422,23 +422,14 @@ map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
 map <Leader>fe :call <SID>FoldSearchEnd()<CR>
 " Section: Menu {{{1
 if has("menu")
-  vnoremenu <script> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
-  noremenu <script> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
-  vnoremenu <script> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
-  noremenu <script> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
-  vnoremenu <script> Plugin.FoldSearch.Context.Show :Fc<CR>
-  noremenu <script> Plugin.FoldSearch.Context.Show :Fc<CR>
-  vnoremenu <script> Plugin.FoldSearch.Search :Fs<CR>
-  noremenu <script> Plugin.FoldSearch.Search :Fs<CR>
-  vnoremenu <script> Plugin.FoldSearch.Current\ Word :Fw<CR>
-  noremenu <script> Plugin.FoldSearch.Current\ Word :Fw<CR>
-  vnoremenu <script> Plugin.FoldSearch.Pattern :Fp 
-  noremenu <script> Plugin.FoldSearch.Pattern :Fp 
-  vnoremenu <script> Plugin.FoldSearch.Spelling :FS<CR>
-  noremenu <script> Plugin.FoldSearch.Spelling :FS<CR>
-  vnoremenu <script> Plugin.FoldSearch.Last :Fl<CR>
-  noremenu <script> Plugin.FoldSearch.Last :Fl<CR>
-  vnoremenu <script> Plugin.FoldSearch.End :Fe<CR>
-  noremenu <script> Plugin.FoldSearch.End :Fe<CR>
+  amenu <silent> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
+  amenu <silent> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
+  amenu <silent> Plugin.FoldSearch.Context.Show :Fc<CR>
+  amenu <silent> Plugin.FoldSearch.Search :Fs<CR>
+  amenu <silent> Plugin.FoldSearch.Current\ Word :Fw<CR>
+  amenu <silent> Plugin.FoldSearch.Pattern :Fp 
+  amenu <silent> Plugin.FoldSearch.Spelling :FS<CR>
+  amenu <silent> Plugin.FoldSearch.Last :Fl<CR>
+  amenu <silent> Plugin.FoldSearch.End :Fe<CR>
 endif
 " vim600:fdm=marker:commentstring="\ %s:
