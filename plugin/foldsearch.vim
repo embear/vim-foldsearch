@@ -1,26 +1,27 @@
-" Name: foldsearch.vim
+" Name:    foldsearch.vim
 " Version: $Id$
-" Author: Markus Braun
-" Summary: Vim plugin to fold away lines that don't match a search pattern
+" Author:  Markus Braun <markus.braun@krawel.de>
+" Summary: Vim plugin to fold away lines that don't match a pattern
 " Licence: This program is free software; you can redistribute it and/or
 "          modify it under the terms of the GNU General Public License.
 "          See http://www.gnu.org/copyleft/gpl.txt
+"
 " Section: Documentation {{{1
 "
-" Description:
+" Description: {{{2
 "
 "   This plugin provides commands that fold away lines that don't match
 "   a specific search pattern.  This pattern can be the word under the cursor,
 "   the last search pattern, a regular expression or spelling errors. There
 "   are also commands to change the context of the shown lines.
 "
-" Installation:
+" Installation: {{{2
 "
 "   Copy the foldsearch.vim file to the $HOME/.vim/plugin directory.
 "   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
 "   runtimepath' for more details about Vim plugins.
 "
-" Commands:
+" Commands: {{{2
 "
 "   :Fw [context*] show lines which contain the word under the cursor. Default
 "                  [context] is 0.
@@ -48,7 +49,7 @@
 "     it defines only the context before the pattern. If it has a '+' prefix,
 "     it defines only the context after a pattern.
 "
-" Mappings:
+" Mappings: {{{2
 "
 "   <Leader>fs     FoldSearch()
 "   <Leader>fw     FoldCword()
@@ -58,20 +59,33 @@
 "   <Leader>fd     FoldContextAdd(-1)
 "   <Leader>fe     FoldSearchEnd()
 "
-" Variables:
+" Variables: {{{2
 "
 "   g:foldsearch_highlight
 "     Highlight the pattern used for folding. Defaults to 0.
 "
 " Section: Plugin header {{{1
 
+" guard against multiple loads {{{2
 if (exists("g:loaded_foldsearch") || &cp)
   finish
 endi
 let g:loaded_foldsearch = "$Revision$"
 
+" check for correct vim version {{{2
+" matchadd() requires at least 7.1.40
+if !(v:version > 701 || (v:version == 701 && has("patch040")))
+  finish
+endif
+
+" define default "foldsearch_highlight" {{{2
 if (!exists("g:foldsearch_highlight"))
   let g:foldsearch_highlight = 0
+endif
+
+" define default "foldsearch_debug" {{{2
+if (!exists("g:foldsearch_debug"))
+  let g:foldsearch_debug = 0
 endif
 
 " Section: Functions {{{1
@@ -402,7 +416,19 @@ function! s:FoldSearchEnd()
   normal zz
 
 endfunction
+
+" Function: s:FoldSearchDebug(level, text) {{{2
+"
+" output debug message, if this message has high enough importance
+"
+function! s:FoldSearchDebug(level, text)
+  if (g:foldsearch_debug >= a:level)
+    echom "foldsearch: " . a:text
+  endif
+endfunction
+
 " Section: Commands {{{1
+
 command! -nargs=* -complete=command Fs call s:FoldSearch(<f-args>)
 command! -nargs=* -complete=command Fw call s:FoldCword(<f-args>)
 command! -nargs=1 Fp call s:FoldPattern(<q-args>)
@@ -412,7 +438,9 @@ command! -nargs=* Fc call s:FoldSearchContext(<f-args>)
 command! -nargs=0 Fi call s:FoldContextAdd(+1)
 command! -nargs=0 Fd call s:FoldContextAdd(-1)
 command! -nargs=0 Fe call s:FoldSearchEnd()
+
 " Section: Mappings {{{1
+
 map <Leader>fs :call <SID>FoldSearch()<CR>
 map <Leader>fw :call <SID>FoldCword()<CR>
 map <Leader>fS :call <SID>FoldSpell()<CR>
@@ -420,7 +448,9 @@ map <Leader>fl :call <SID>FoldLast()<CR>
 map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
 map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
 map <Leader>fe :call <SID>FoldSearchEnd()<CR>
+
 " Section: Menu {{{1
+
 if has("menu")
   amenu <silent> Plugin.FoldSearch.Context.Increment\ One\ Line :Fi<CR>
   amenu <silent> Plugin.FoldSearch.Context.Decrement\ One\ Line :Fd<CR>
@@ -432,4 +462,5 @@ if has("menu")
   amenu <silent> Plugin.FoldSearch.Last :Fl<CR>
   amenu <silent> Plugin.FoldSearch.End :Fe<CR>
 endif
-" vim600:fdm=marker:commentstring="\ %s:
+
+" vim600: foldmethod=marker foldlevel=0 :
