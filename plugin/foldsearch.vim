@@ -153,7 +153,7 @@ function! s:FoldSpell(...)
 
   let b:foldsearch_pattern = ''
 
-  " do the search
+  " do the search (only search for the first spelling error in line)
   let lnum = 1
   while lnum <= line("$")
     let bad_word = spellbadword(getline(lnum))[0]
