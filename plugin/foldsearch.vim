@@ -1,5 +1,5 @@
 " Name:    foldsearch.vim
-" Version: $Id$
+" Version: 0.1.0
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to fold away lines that don't match a pattern
 " Licence: This program is free software; you can redistribute it and/or
@@ -70,7 +70,7 @@
 if (exists("g:loaded_foldsearch") || &cp)
   finish
 endi
-let g:loaded_foldsearch = "$Revision$"
+let g:loaded_foldsearch = 1
 
 " check for correct vim version {{{2
 " matchadd() requires at least 7.1.40
