@@ -148,7 +148,14 @@ function! s:FoldSpell(...)
   if (empty(b:foldsearch_pattern))
     echo "No spelling errors found!"
   else
-    call s:FoldSearchDo()
+    " determine the number of context lines
+    if (a:0 == 0)
+      call s:FoldSearchDo()
+    elseif (a:0 == 1)
+      call s:FoldSearchContext(a:1)
+    elseif (a:0 == 2)
+      call s:FoldSearchContext(a:1, a:2)
+    endif
   endif
 
 endfunction
