@@ -52,8 +52,8 @@
 "
 "   <Leader>fs     FoldSearch()
 "   <Leader>fw     FoldCword()
-"   <Leader>fl     FoldLast()
 "   <Leader>fS     FoldSpell()
+"   <Leader>fl     FoldLast()
 "   <Leader>fi     FoldContextAdd(+1)
 "   <Leader>fd     FoldContextAdd(-1)
 "   <Leader>fe     FoldSearchEnd()
@@ -117,11 +117,11 @@ function! s:FoldPattern(pattern)
   call s:FoldSearchDo()
 endfunction
 
-" Function: s:FoldSpell()  {{{2
+" Function: s:FoldSpell(...)  {{{2
 "
 " do the search and folding based on spellchecker
 "
-function! s:FoldSpell()
+function! s:FoldSpell(...)
   " if foldsearch_pattern is not defined, then exit
   if (!&spell)
     echo "Spell checking not enabled, ending Foldsearch"
@@ -185,6 +185,8 @@ function! s:FoldSearchContext(...)
     return
   else
     let number=1
+    let b:foldsearch_context_pre = 0
+    let b:foldsearch_context_post = 0
     while number <= a:0
       execute "let argument = a:" . number . ""
       if (strpart(argument, 0, 1) == "-")
@@ -369,19 +371,19 @@ function! s:FoldSearchEnd()
 
 endfunction
 " Section: Commands {{{1
-command! -nargs=? -complete=command Fs call s:FoldSearch(<f-args>)
-command! -nargs=? -complete=command Fw call s:FoldCword(<f-args>)
+command! -nargs=* -complete=command Fs call s:FoldSearch(<f-args>)
+command! -nargs=* -complete=command Fw call s:FoldCword(<f-args>)
 command! -nargs=1 Fp call s:FoldPattern(<q-args>)
+command! -nargs=* -complete=command FS call s:FoldSpell(<f-args>)
 command! -nargs=0 Fl call s:FoldLast()
-command! -nargs=0 FS call s:FoldSpell()
 command! -nargs=* Fc call s:FoldSearchContext(<f-args>)
 command! -nargs=0 Fi call s:FoldContextAdd(+1)
 command! -nargs=0 Fd call s:FoldContextAdd(-1)
 command! -nargs=0 Fe call s:FoldSearchEnd()
 " Section: Mappings {{{1
 map <Leader>fs :call <SID>FoldSearch()<CR>
-map <Leader>fS :call <SID>FoldSpell()<CR>
 map <Leader>fw :call <SID>FoldCword()<CR>
+map <Leader>fS :call <SID>FoldSpell()<CR>
 map <Leader>fl :call <SID>FoldLast()<CR>
 map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
 map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
