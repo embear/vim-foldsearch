@@ -333,10 +333,10 @@ function! s:FoldSearchDo()
 
   " highlight search pattern if requested
   if (g:foldsearch_highlight == 1)
-    if (exists("b:foldearch_highlight_id"))
-      matchdelete(b:foldearch_highlight_id)
+    if (exists("b:foldsearch_highlight_id"))
+      matchdelete(b:foldsearch_highlight_id)
     endif
-    let b:foldearch_highlight_id = matchadd("Search", b:foldsearch_pattern)
+    let b:foldsearch_highlight_id = matchadd("Search", b:foldsearch_pattern)
   endif
 
   " save cursor position
@@ -422,9 +422,9 @@ function! s:FoldSearchEnd()
   endif
 
   " delete highlighting 
-  if (exists("b:foldearch_highlight_id"))
-    call matchdelete(b:foldearch_highlight_id)
-    unlet b:foldearch_highlight_id
+  if (exists("b:foldsearch_highlight_id"))
+    call matchdelete(b:foldsearch_highlight_id)
+    unlet b:foldsearch_highlight_id
   endif
 
   " give a message to the user
