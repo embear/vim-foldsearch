@@ -175,7 +175,7 @@ function! s:FoldSpell(...)
     endif
     let lnum = lnum + 1
   endwhile
-  
+
   let b:foldsearch_pattern = b:foldsearch_pattern . '\)\>'
 
   " report if pattern not found and thus no fold created
@@ -299,7 +299,7 @@ function! s:FoldSearchInit()
   " save state if needed
   if (b:foldsearch_foldsave == 0)
     let b:foldsearch_foldsave = 1
-    
+
     " make a view of the current file for later restore of manual folds
     let b:foldsearch_viewoptions = &viewoptions
     let &viewoptions = "folds,options"
