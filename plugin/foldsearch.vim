@@ -347,25 +347,40 @@ function! s:FoldSearchDo()
   let pattern_found = 0      " flag to set when search pattern found
   let fold_created = 0       " flag to set when a fold is found
   let flags = "w"            " allow wrapping in the search
-  let line1 =  0             " set marker for beginning of fold
+  let line_fold_start =  0   " set marker for beginning of fold
 
   " do the search
   while search(b:foldsearch_pattern, flags) > 0
+    " patern had been found
     let pattern_found = 1
-    let line2 = line(".") - b:foldsearch_context_pre
-    if (line2 - 1 >= line1 && line2 - 1 != 0)
-      execute ":" . line1 . "," . (line2 - 1) . "fold"
-      let fold_created = 1       " at least one fold has been found
+
+    " determine end of fold
+    let line_fold_end = line(".") - 1 - b:foldsearch_context_pre
+
+    " validate line of fold end and set fold
+    if (line_fold_end >= line_fold_start && line_fold_end != 0)
+      " create fold
+      execute ":" . line_fold_start . "," . line_fold_end . " fold"
+
+      " at least one fold has been found
+      let fold_created = 1
     endif
-    let line1 = line2 + 1 + b:foldsearch_context_pre + b:foldsearch_context_post " update marker
-    let flags = "W"              " turn off wrapping
+
+    " jump to the end of this match. needed for multiline searches
+    call search(b:foldsearch_pattern, flags . "ce")
+
+    " update marker
+    let line_fold_start = line(".") + 1 + b:foldsearch_context_post
+
+    " turn off wrapping
+    let flags = "W"
   endwhile
 
   " now create the last fold which goes to the end of the file.
   normal $G
-  let  line2 = line(".")
-  if (line2  >= line1 && pattern_found == 1)
-    execute ":". line1 . "," . line2 . "fold"
+  let  line_fold_end = line(".")
+  if (line_fold_end  >= line_fold_start && pattern_found == 1)
+    execute ":". line_fold_start . "," . line_fold_end . "fold"
   endif
 
   " report if pattern not found and thus no fold created
