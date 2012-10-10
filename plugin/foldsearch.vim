@@ -1,77 +1,19 @@
 " Name:    foldsearch.vim
-" Version: 0.1.0
+" Version: 1.0.0
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to fold away lines that don't match a pattern
 " Licence: This program is free software: you can redistribute it and/or modify
 "          it under the terms of the GNU General Public License as published by
 "          the Free Software Foundation, either version 3 of the License, or
 "          (at your option) any later version.
-"          
+"
 "          This program is distributed in the hope that it will be useful,
 "          but WITHOUT ANY WARRANTY; without even the implied warranty of
 "          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 "          GNU General Public License for more details.
-"          
+"
 "          You should have received a copy of the GNU General Public License
 "          along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"
-" Section: Documentation {{{1
-"
-" Description: {{{2
-"
-"   This plugin provides commands that fold away lines that don't match
-"   a specific search pattern.  This pattern can be the word under the cursor,
-"   the last search pattern, a regular expression or spelling errors. There
-"   are also commands to change the context of the shown lines.
-"
-" Installation: {{{2
-"
-"   Copy the foldsearch.vim file to the $HOME/.vim/plugin directory.
-"   Refer to ':help add-plugin', ':help add-global-plugin' and ':help
-"   runtimepath' for more details about Vim plugins.
-"
-" Commands: {{{2
-"
-"   :Fw [context*] show lines which contain the word under the cursor. Default
-"                  [context] is 0.
-"  
-"   :Fs [context*] show lines which contain previous search pattern. Default
-"                  [context] is 0.
-"  
-"   :Fp pattern    show the lines that contain the regular expression. Context
-"                  is 0.
-"  
-"   :Fl            fold again with the last used pattern
-"
-"   :FS            show the lines that contain spelling errors.
-"
-"   :Fc [context*] show context lines.
-"  
-"   :Fi            increment context by one line.
-"  
-"   :Fd            decrement context by one line.
-"  
-"   :Fe            set modified fold options to their previous value
-"
-"   * context can consist of one or two numbers. A 'unsigned' number defines
-"     the context before and after the pattern. If a number has a '-' prefix,
-"     it defines only the context before the pattern. If it has a '+' prefix,
-"     it defines only the context after a pattern.
-"
-" Mappings: {{{2
-"
-"   <Leader>fs     FoldSearch()
-"   <Leader>fw     FoldCword()
-"   <Leader>fS     FoldSpell()
-"   <Leader>fl     FoldLast()
-"   <Leader>fi     FoldContextAdd(+1)
-"   <Leader>fd     FoldContextAdd(-1)
-"   <Leader>fe     FoldSearchEnd()
-"
-" Variables: {{{2
-"
-"   g:foldsearch_highlight
-"     Highlight the pattern used for folding. Defaults to 0.
 "
 " Section: Plugin header {{{1
 
@@ -342,7 +284,7 @@ function! s:FoldSearchDo()
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
-  " move to the end of the file 
+  " move to the end of the file
   normal $G
   let pattern_found = 0      " flag to set when search pattern found
   let fold_created = 0       " flag to set when a fold is found
@@ -421,7 +363,7 @@ function! s:FoldSearchEnd()
 
   endif
 
-  " delete highlighting 
+  " delete highlighting
   if (exists("b:foldsearch_highlight_id"))
     call matchdelete(b:foldsearch_highlight_id)
     unlet b:foldsearch_highlight_id
@@ -481,7 +423,7 @@ if has("menu")
   amenu <silent> Plugin.FoldSearch.Context.Show :Fc<CR>
   amenu <silent> Plugin.FoldSearch.Search :Fs<CR>
   amenu <silent> Plugin.FoldSearch.Current\ Word :Fw<CR>
-  amenu <silent> Plugin.FoldSearch.Pattern :Fp 
+  amenu <silent> Plugin.FoldSearch.Pattern :Fp
   amenu <silent> Plugin.FoldSearch.Spelling :FS<CR>
   amenu <silent> Plugin.FoldSearch.Last :Fl<CR>
   amenu <silent> Plugin.FoldSearch.End :Fe<CR>

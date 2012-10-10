@@ -1,0 +1,137 @@
+*foldsearch.txt*             For Vim version 7.3    Last change: 2012 October 10
+
+foldsearch                 Version 1.0.0                            *foldsearch*
+
+|foldsearch-description|     Description
+|foldsearch-commands|        Commands
+|foldsearch-mappings|        Mappings
+|foldsearch-settings|        Settings
+|foldsearch-contribute|      Contribute
+|foldsearch-credits|         Credits
+|foldsearch-changelog|       Changelog
+
+==============================================================================
+DESCRIPTION                                             *foldsearch-description*
+
+This plugin provides commands that fold away lines that don't match a specific
+search pattern. This pattern can be the word under the cursor, the last search
+pattern, a regular expression or spelling errors. There are also commands to
+change the context of the shown lines.
+
+==============================================================================
+COMMANDS                                                   *foldsearch-commands*
+
+------------------------------------------------------------------------------
+*:Fw* [context]
+
+Show lines which contain the word under the cursor. Default [context] is
+current context.
+
+[context] can consist of one or two numbers. A 'unsigned' number defines the
+context before and after the pattern. If a number has a '-' prefix, it defines
+only the context before the pattern. If it has a '+' prefix, it defines only
+the context after a pattern.
+
+------------------------------------------------------------------------------
+*:Fs* [context*]
+
+Show lines which contain previous search pattern. Default [context] is current
+context.
+
+------------------------------------------------------------------------------
+*:Fp* pattern
+
+Show the lines that contain the regular expression. Context is 0.
+
+See |regular-expression| for patterns that are accepted.
+
+------------------------------------------------------------------------------
+*:FS*
+
+Show the lines that contain spelling errors.
+
+------------------------------------------------------------------------------
+*:Fl*
+
+Fold again with the last used pattern
+
+------------------------------------------------------------------------------
+*:Fc* [context]
+
+Show [context] lines around matching pattern.
+
+------------------------------------------------------------------------------
+*:Fi*
+
+Increment context by one line.
+
+------------------------------------------------------------------------------
+*:Fd*
+
+Decrement context by one line.
+
+------------------------------------------------------------------------------
+*:Fe*
+
+Set modified fold options to their previous value
+
+==============================================================================
+MAPPINGS                                                   *foldsearch-mappings*
+
+<Leader>fw     |:Fw| with current context.
+<Leader>fs     |:Fs| with current context.
+<Leader>fS     |:FS|
+<Leader>fl     |:Fl|
+<Leader>fi     |:Fi|
+<Leader>fd     |:Fd|
+<Leader>fe     |:Fe|
+
+==============================================================================
+SETTINGS                                                   *foldsearch-settings*
+
+Use: >
+    let g:option_name=option_value
+
+to set them in your global vimrc.
+
+------------------------------------------------------------------------------
+*g:foldsearch_highlight*
+
+Highlight the pattern used for folding.
+
+Value    Description~
+0        Don't highlight pattern.
+1        Highlight pattern.
+
+Default: 0
+
+==============================================================================
+CONTRIBUTE                                               *foldsearch-contribute*
+
+To contact the author (Markus Braun), please email: markus.braun@krawel.de
+
+If you think this plugin could be improved, fork on GitHub and send a pull
+request or just tell me your ideas.
+
+GitHub: https://github.com/embear/vim-foldsearch
+
+==============================================================================
+CREDITS                                                     *foldsearch-credits*
+
+- Karl Mowatt-Wilson for bug reports
+
+==============================================================================
+CHANGELOG                                                 *foldsearch-changelog*
+
+v1.0.0 : 2012-10-10
+  - handle multiline regular expressions correctly
+
+v2213 : 2008-07-26
+  - fixed a bug in context handling
+
+v2209 : 2008-07-17
+  - initial version
+
+==============================================================================
+
+vim:tw=78:ts=8:ft=help:norl:
