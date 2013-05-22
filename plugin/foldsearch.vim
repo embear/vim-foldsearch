@@ -285,7 +285,7 @@ function! s:FoldSearchDo()
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
   " move to the end of the file
-  normal $G
+  normal $G$
   let pattern_found = 0      " flag to set when search pattern found
   let fold_created = 0       " flag to set when a fold is found
   let flags = "w"            " allow wrapping in the search
