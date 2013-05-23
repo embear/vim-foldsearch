@@ -247,6 +247,11 @@ function! s:FoldSearchInit()
     let &viewoptions = "folds,options"
     let b:foldsearch_viewfile = tempname()
     execute "mkview " . b:foldsearch_viewfile
+    " For unnamed buffers, an 'enew' command gets added to the view which we
+    " need to filter out.
+    let l:lines = readfile(b:foldsearch_viewfile)
+    call filter(l:lines, 'v:val != "enew"')
+    call writefile(l:lines, b:foldsearch_viewfile)
   endif
 
   let &foldtext = ""
