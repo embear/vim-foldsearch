@@ -34,6 +34,11 @@ if (!exists("g:foldsearch_highlight"))
   let g:foldsearch_highlight = 0
 endif
 
+" define default "foldsearch_disable_mappings" {{{2
+if (!exists("g:foldsearch_disable_mappings"))
+  let g:foldsearch_disable_mappings = 0
+endif
+
 " define default "foldsearch_debug" {{{2
 if (!exists("g:foldsearch_debug"))
   let g:foldsearch_debug = 0
@@ -407,13 +412,15 @@ command! -nargs=0 Fe call s:FoldSearchEnd()
 
 " Section: Mappings {{{1
 
-map <Leader>fs :call <SID>FoldSearch()<CR>
-map <Leader>fw :call <SID>FoldCword()<CR>
-map <Leader>fS :call <SID>FoldSpell()<CR>
-map <Leader>fl :call <SID>FoldLast()<CR>
-map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
-map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
-map <Leader>fe :call <SID>FoldSearchEnd()<CR>
+if !g:foldsearch_disable_mappings
+   map <Leader>fs :call <SID>FoldSearch()<CR>
+   map <Leader>fw :call <SID>FoldCword()<CR>
+   map <Leader>fS :call <SID>FoldSpell()<CR>
+   map <Leader>fl :call <SID>FoldLast()<CR>
+   map <Leader>fi :call <SID>FoldContextAdd(+1)<CR>
+   map <Leader>fd :call <SID>FoldContextAdd(-1)<CR>
+   map <Leader>fe :call <SID>FoldSearchEnd()<CR>
+endif
 
 " Section: Menu {{{1
 

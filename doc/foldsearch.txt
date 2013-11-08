@@ -86,6 +86,8 @@ MAPPINGS                                                   *foldsearch-mappings*
 <Leader>fd     |:Fd|
 <Leader>fe     |:Fe|
 
+Mappings can be disabled by setting |g:foldsearch_disable_mappings| to 1
+
 ==============================================================================
 SETTINGS                                                   *foldsearch-settings*
 
@@ -102,6 +104,18 @@ Highlight the pattern used for folding.
 Value    Description~
 0        Don't highlight pattern.
 1        Highlight pattern.
+
+Default: 0
+
+------------------------------------------------------------------------------
+*g:foldsearch_disable_mappings*
+
+Disable the mappings. Use this to define your own mappings or to use the
+plugin via commands only.
+
+Value    Description~
+0        Don't disable mappings (use mappings)
+1        Disable Mappings
 
 Default: 0
 
@@ -122,6 +136,9 @@ CREDITS                                                     *foldsearch-credits*
 
 ==============================================================================
 CHANGELOG                                                 *foldsearch-changelog*
+
+v1.0.1 : 2013-03-20
+  - added |g:foldsearch_disable_mappings| config variable
 
 v1.0.0 : 2012-10-10
   - handle multiline regular expressions correctly
