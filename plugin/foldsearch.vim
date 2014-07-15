@@ -259,7 +259,7 @@ function! s:FoldSearchInit()
     call writefile(l:lines, b:foldsearch_viewfile)
   endif
 
-  let &foldtext = ""
+  "let &foldtext = ""
   let &foldmethod = "manual"
   let &foldenable = 1
   let &foldminlines = 0
