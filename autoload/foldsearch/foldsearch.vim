@@ -23,7 +23,7 @@
 "
 function! foldsearch#foldsearch#FoldCword(...)
   " define the search pattern
-  let b:foldsearch_pattern = '\<'.expand("<cword>").'\>'
+  let w:foldsearch_pattern = '\<'.expand("<cword>").'\>'
 
   " determine the number of context lines
   if (a:0 ==  0)
@@ -42,7 +42,7 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldSearch(...)
   " define the search pattern
-  let b:foldsearch_pattern = @/
+  let w:foldsearch_pattern = @/
 
   " determine the number of context lines
   if (a:0 == 0)
@@ -61,7 +61,7 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldPattern(pattern)
   " define the search pattern
-  let b:foldsearch_pattern = a:pattern
+  let w:foldsearch_pattern = a:pattern
 
   " call the folding function
   call foldsearch#foldsearch#FoldSearchDo()
@@ -78,26 +78,26 @@ function! foldsearch#foldsearch#FoldSpell(...)
     return
   endif
 
-  let b:foldsearch_pattern = ''
+  let w:foldsearch_pattern = ''
 
   " do the search (only search for the first spelling error in line)
   let lnum = 1
   while lnum <= line("$")
     let bad_word = spellbadword(getline(lnum))[0]
     if bad_word != ''
-      if empty(b:foldsearch_pattern)
-        let b:foldsearch_pattern = '\<\(' . bad_word
+      if empty(w:foldsearch_pattern)
+        let w:foldsearch_pattern = '\<\(' . bad_word
       else
-        let b:foldsearch_pattern = b:foldsearch_pattern . '\|' . bad_word
+        let w:foldsearch_pattern = w:foldsearch_pattern . '\|' . bad_word
       endif
     endif
     let lnum = lnum + 1
   endwhile
 
-  let b:foldsearch_pattern = b:foldsearch_pattern . '\)\>'
+  let w:foldsearch_pattern = w:foldsearch_pattern . '\)\>'
 
   " report if pattern not found and thus no fold created
-  if (empty(b:foldsearch_pattern))
+  if (empty(w:foldsearch_pattern))
     echo "No spelling errors found!"
   else
     " determine the number of context lines
@@ -117,7 +117,7 @@ endfunction
 " Search and fold the last pattern
 "
 function! foldsearch#foldsearch#FoldLast()
-  if (!exists("b:foldsearch_context_pre") || !exists("b:foldsearch_context_post") || !exists("b:foldsearch_pattern"))
+  if (!exists("w:foldsearch_context_pre") || !exists("w:foldsearch_context_post") || !exists("w:foldsearch_pattern"))
     return
   endif
 
@@ -131,40 +131,40 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldSearchContext(...)
   " force context to be defined
-  if (!exists("b:foldsearch_context_pre"))
-    let b:foldsearch_context_pre = 0
+  if (!exists("w:foldsearch_context_pre"))
+    let w:foldsearch_context_pre = 0
   endif
-  if (!exists("b:foldsearch_context_post"))
-    let b:foldsearch_context_post = 0
+  if (!exists("w:foldsearch_context_post"))
+    let w:foldsearch_context_post = 0
   endif
 
   if (a:0 == 0)
     " if no new context is given display current and exit
-    echo "Foldsearch context: pre=".b:foldsearch_context_pre." post=".b:foldsearch_context_post
+    echo "Foldsearch context: pre=".w:foldsearch_context_pre." post=".w:foldsearch_context_post
     return
   else
     let number=1
-    let b:foldsearch_context_pre = 0
-    let b:foldsearch_context_post = 0
+    let w:foldsearch_context_pre = 0
+    let w:foldsearch_context_post = 0
     while number <= a:0
       execute "let argument = a:" . number . ""
       if (strpart(argument, 0, 1) == "-")
-	let b:foldsearch_context_pre = strpart(argument, 1)
+	let w:foldsearch_context_pre = strpart(argument, 1)
       elseif (strpart(argument, 0, 1) == "+")
-	let b:foldsearch_context_post = strpart(argument, 1)
+	let w:foldsearch_context_post = strpart(argument, 1)
       else
-	let b:foldsearch_context_pre = argument
-	let b:foldsearch_context_post = argument
+	let w:foldsearch_context_pre = argument
+	let w:foldsearch_context_post = argument
       endif
       let number = number + 1
     endwhile
   endif
 
-  if (b:foldsearch_context_pre < 0)
-    let b:foldsearch_context_pre = 0
+  if (w:foldsearch_context_pre < 0)
+    let w:foldsearch_context_pre = 0
   endif
-  if (b:foldsearch_context_post < 0)
-    let b:foldsearch_context_post = 0
+  if (w:foldsearch_context_post < 0)
+    let w:foldsearch_context_post = 0
   endif
 
   " call the folding function
@@ -177,21 +177,21 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldContextAdd(change)
   " force context to be defined
-  if (!exists("b:foldsearch_context_pre"))
-    let b:foldsearch_context_pre = 0
+  if (!exists("w:foldsearch_context_pre"))
+    let w:foldsearch_context_pre = 0
   endif
-  if (!exists("b:foldsearch_context_post"))
-    let b:foldsearch_context_post = 0
+  if (!exists("w:foldsearch_context_post"))
+    let w:foldsearch_context_post = 0
   endif
 
-  let b:foldsearch_context_pre = b:foldsearch_context_pre + a:change
-  let b:foldsearch_context_post = b:foldsearch_context_post + a:change
+  let w:foldsearch_context_pre = w:foldsearch_context_pre + a:change
+  let w:foldsearch_context_post = w:foldsearch_context_post + a:change
 
-  if (b:foldsearch_context_pre < 0)
-    let b:foldsearch_context_pre = 0
+  if (w:foldsearch_context_pre < 0)
+    let w:foldsearch_context_pre = 0
   endif
-  if (b:foldsearch_context_post < 0)
-    let b:foldsearch_context_post = 0
+  if (w:foldsearch_context_post < 0)
+    let w:foldsearch_context_post = 0
   endif
 
   " call the folding function
@@ -204,30 +204,30 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldSearchInit()
   " force context to be defined
-  if (!exists("b:foldsearch_context_pre"))
-    let b:foldsearch_context_pre = 0
+  if (!exists("w:foldsearch_context_pre"))
+    let w:foldsearch_context_pre = 0
   endif
-  if (!exists("b:foldsearch_context_post"))
-    let b:foldsearch_context_post = 0
+  if (!exists("w:foldsearch_context_post"))
+    let w:foldsearch_context_post = 0
   endif
-  if (!exists("b:foldsearch_foldsave"))
-    let b:foldsearch_foldsave = 0
+  if (!exists("w:foldsearch_foldsave"))
+    let w:foldsearch_foldsave = 0
   endif
 
   " save state if needed
-  if (b:foldsearch_foldsave == 0)
-    let b:foldsearch_foldsave = 1
+  if (w:foldsearch_foldsave == 0)
+    let w:foldsearch_foldsave = 1
 
     " make a view of the current file for later restore of manual folds
-    let b:foldsearch_viewoptions = &viewoptions
+    let w:foldsearch_viewoptions = &viewoptions
     let &viewoptions = "folds,options"
-    let b:foldsearch_viewfile = tempname()
-    execute "mkview " . b:foldsearch_viewfile
+    let w:foldsearch_viewfile = tempname()
+    execute "mkview " . w:foldsearch_viewfile
     " For unnamed buffers, an 'enew' command gets added to the view which we
     " need to filter out.
-    let l:lines = readfile(b:foldsearch_viewfile)
+    let l:lines = readfile(w:foldsearch_viewfile)
     call filter(l:lines, 'v:val != "enew"')
-    call writefile(l:lines, b:foldsearch_viewfile)
+    call writefile(l:lines, w:foldsearch_viewfile)
   endif
 
   let &foldtext = ""
@@ -241,12 +241,12 @@ endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDo()  {{{2
 "
-" do the search and folding based on b:foldsearch_pattern and
-" b:foldsearch_context
+" do the search and folding based on w:foldsearch_pattern and
+" w:foldsearch_context
 "
 function! foldsearch#foldsearch#FoldSearchDo()
   " if foldsearch_pattern is not defined, then exit
-  if (!exists("b:foldsearch_pattern"))
+  if (!exists("w:foldsearch_pattern"))
     echo "No search pattern defined, ending fold search"
     return
   endif
@@ -256,10 +256,10 @@ function! foldsearch#foldsearch#FoldSearchDo()
 
   " highlight search pattern if requested
   if (g:foldsearch_highlight == 1)
-    if (exists("b:foldsearch_highlight_id"))
-      matchdelete(b:foldsearch_highlight_id)
+    if (exists("w:foldsearch_highlight_id"))
+      matchdelete(w:foldsearch_highlight_id)
     endif
-    let b:foldsearch_highlight_id = matchadd("Search", b:foldsearch_pattern)
+    let w:foldsearch_highlight_id = matchadd("Search", w:foldsearch_pattern)
   endif
 
   " save cursor position
@@ -273,12 +273,12 @@ function! foldsearch#foldsearch#FoldSearchDo()
   let line_fold_start =  0   " set marker for beginning of fold
 
   " do the search
-  while search(b:foldsearch_pattern, flags) > 0
+  while search(w:foldsearch_pattern, flags) > 0
     " patern had been found
     let pattern_found = 1
 
     " determine end of fold
-    let line_fold_end = line(".") - 1 - b:foldsearch_context_pre
+    let line_fold_end = line(".") - 1 - w:foldsearch_context_pre
 
     " validate line of fold end and set fold
     if (line_fold_end >= line_fold_start && line_fold_end != 0)
@@ -290,10 +290,10 @@ function! foldsearch#foldsearch#FoldSearchDo()
     endif
 
     " jump to the end of this match. needed for multiline searches
-    call search(b:foldsearch_pattern, flags . "ce")
+    call search(w:foldsearch_pattern, flags . "ce")
 
     " update marker
-    let line_fold_start = line(".") + 1 + b:foldsearch_context_post
+    let line_fold_start = line(".") + 1 + w:foldsearch_context_post
 
     " turn off wrapping
     let flags = "W"
@@ -331,23 +331,23 @@ function! foldsearch#foldsearch#FoldSearchEnd()
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
-  if (!exists('b:foldsearch_foldsave'))
-    let b:foldsearch_foldsave = 0
+  if (!exists('w:foldsearch_foldsave'))
+    let w:foldsearch_foldsave = 0
   endif
-  if (b:foldsearch_foldsave == 1)
-    let b:foldsearch_foldsave = 0
+  if (w:foldsearch_foldsave == 1)
+    let w:foldsearch_foldsave = 0
 
     " restore the folds before foldsearch
-    execute "silent! source " . b:foldsearch_viewfile
-    call delete(b:foldsearch_viewfile)
-    let &viewoptions = b:foldsearch_viewoptions
+    execute "silent! source " . w:foldsearch_viewfile
+    call delete(w:foldsearch_viewfile)
+    let &viewoptions = w:foldsearch_viewoptions
 
   endif
 
   " delete highlighting
-  if (exists("b:foldsearch_highlight_id"))
-    call matchdelete(b:foldsearch_highlight_id)
-    unlet b:foldsearch_highlight_id
+  if (exists("w:foldsearch_highlight_id"))
+    call matchdelete(w:foldsearch_highlight_id)
+    unlet w:foldsearch_highlight_id
   endif
 
   " give a message to the user
