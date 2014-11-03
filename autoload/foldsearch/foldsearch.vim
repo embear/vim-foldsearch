@@ -210,30 +210,36 @@ function! foldsearch#foldsearch#FoldSearchInit()
   if (!exists("w:foldsearch_context_post"))
     let w:foldsearch_context_post = 0
   endif
-  if (!exists("w:foldsearch_foldsave"))
-    let w:foldsearch_foldsave = 0
-  endif
 
-  " save state if needed
-  if (w:foldsearch_foldsave == 0)
-    let w:foldsearch_foldsave = 1
+  " save user settings before making changes
+  let w:foldsearch_foldtext = &foldtext
+  let w:foldsearch_foldmethod = &foldmethod
+  let w:foldsearch_foldenable = &foldenable
+  let w:foldsearch_foldminlines = &foldminlines
+
+  " modify settings
+  let &foldtext = ""
+  let &foldmethod = "manual"
+  let &foldenable = 1
+  let &foldminlines = 0
+
+  " save folds if needed
+  if (!exists("w:foldsearch_viewfile"))
+    " create a file for view options
+    let w:foldsearch_viewfile = tempname()
 
     " make a view of the current file for later restore of manual folds
-    let w:foldsearch_viewoptions = &viewoptions
-    let &viewoptions = "folds,options"
-    let w:foldsearch_viewfile = tempname()
+    let l:viewoptions = &viewoptions
+    let &viewoptions = "folds"
     execute "mkview " . w:foldsearch_viewfile
-    " For unnamed buffers, an 'enew' command gets added to the view which we
+    let &viewoptions = l:viewoptions
+
+    " for unnamed buffers, an 'enew' command gets added to the view which we
     " need to filter out.
     let l:lines = readfile(w:foldsearch_viewfile)
     call filter(l:lines, 'v:val != "enew"')
     call writefile(l:lines, w:foldsearch_viewfile)
   endif
-
-  let &foldtext = ""
-  let &foldmethod = "manual"
-  let &foldenable = 1
-  let &foldminlines = 0
 
   " erase all folds to begin with
   normal zE
@@ -331,17 +337,11 @@ function! foldsearch#foldsearch#FoldSearchEnd()
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
-  if (!exists('w:foldsearch_foldsave'))
-    let w:foldsearch_foldsave = 0
-  endif
-  if (w:foldsearch_foldsave == 1)
-    let w:foldsearch_foldsave = 0
-
-    " restore the folds before foldsearch
+  " restore the folds before foldsearch
+  if (exists("w:foldsearch_viewfile"))
     execute "silent! source " . w:foldsearch_viewfile
     call delete(w:foldsearch_viewfile)
-    let &viewoptions = w:foldsearch_viewoptions
-
+    unlet w:foldsearch_viewfile
   endif
 
   " delete highlighting
@@ -349,6 +349,18 @@ function! foldsearch#foldsearch#FoldSearchEnd()
     call matchdelete(w:foldsearch_highlight_id)
     unlet w:foldsearch_highlight_id
   endif
+
+  " restore user settings before making changes
+  let &foldtext = w:foldsearch_foldtext
+  let &foldmethod = w:foldsearch_foldmethod
+  let &foldenable = w:foldsearch_foldenable
+  let &foldminlines = w:foldsearch_foldminlines
+
+  " remove user settings after restoring them
+  unlet w:foldsearch_foldtext
+  unlet w:foldsearch_foldmethod
+  unlet w:foldsearch_foldenable
+  unlet w:foldsearch_foldminlines
 
   " give a message to the user
   echo "Foldsearch ended"
