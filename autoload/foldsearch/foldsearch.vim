@@ -211,20 +211,20 @@ function! foldsearch#foldsearch#FoldSearchInit()
     let w:foldsearch_context_post = 0
   endif
 
-  " save user settings before making changes
-  let w:foldsearch_foldtext = &foldtext
-  let w:foldsearch_foldmethod = &foldmethod
-  let w:foldsearch_foldenable = &foldenable
-  let w:foldsearch_foldminlines = &foldminlines
-
-  " modify settings
-  let &foldtext = ""
-  let &foldmethod = "manual"
-  let &foldenable = 1
-  let &foldminlines = 0
-
-  " save folds if needed
+  " save current setup
   if (!exists("w:foldsearch_viewfile"))
+    " save user settings before making changes
+    let w:foldsearch_foldtext = &foldtext
+    let w:foldsearch_foldmethod = &foldmethod
+    let w:foldsearch_foldenable = &foldenable
+    let w:foldsearch_foldminlines = &foldminlines
+
+    " modify settings
+    let &foldtext = ""
+    let &foldmethod = "manual"
+    let &foldenable = 1
+    let &foldminlines = 0
+
     " create a file for view options
     let w:foldsearch_viewfile = tempname()
 
@@ -342,6 +342,18 @@ function! foldsearch#foldsearch#FoldSearchEnd()
     execute "silent! source " . w:foldsearch_viewfile
     call delete(w:foldsearch_viewfile)
     unlet w:foldsearch_viewfile
+
+    " restore user settings before making changes
+    let &foldtext = w:foldsearch_foldtext
+    let &foldmethod = w:foldsearch_foldmethod
+    let &foldenable = w:foldsearch_foldenable
+    let &foldminlines = w:foldsearch_foldminlines
+
+    " remove user settings after restoring them
+    unlet w:foldsearch_foldtext
+    unlet w:foldsearch_foldmethod
+    unlet w:foldsearch_foldenable
+    unlet w:foldsearch_foldminlines
   endif
 
   " delete highlighting
@@ -349,18 +361,6 @@ function! foldsearch#foldsearch#FoldSearchEnd()
     call matchdelete(w:foldsearch_highlight_id)
     unlet w:foldsearch_highlight_id
   endif
-
-  " restore user settings before making changes
-  let &foldtext = w:foldsearch_foldtext
-  let &foldmethod = w:foldsearch_foldmethod
-  let &foldenable = w:foldsearch_foldenable
-  let &foldminlines = w:foldsearch_foldminlines
-
-  " remove user settings after restoring them
-  unlet w:foldsearch_foldtext
-  unlet w:foldsearch_foldmethod
-  unlet w:foldsearch_foldenable
-  unlet w:foldsearch_foldminlines
 
   " give a message to the user
   echo "Foldsearch ended"
