@@ -137,6 +137,10 @@ CREDITS                                                     *foldsearch-credits*
 ==============================================================================
 CHANGELOG                                                 *foldsearch-changelog*
 
+v1.1.0 : 2014-11-03
+  - use vim autoload feature to load functions on demand
+  - better save/restore of modified options
+
 v1.0.1 : 2013-03-20
   - added |g:foldsearch_disable_mappings| config variable
 
