@@ -1,10 +1,13 @@
 # Vim-Foldsearch
 
+Bitbucket: https://bitbucket.org/embear/foldsearch
 GitHub: https://github.com/embear/vim-foldsearch
+VIM: http://www.vim.org/scripts/script.php?script_id=2302
 
 ## Credits
 
-Karl Mowatt-Wilson for bug reports
+  - Karl Mowatt-Wilson for bug reports
+  - John Appleseed for patches
 
 ## Description
 
@@ -17,9 +20,10 @@ change the context of the shown lines.
 
 To contact the author (Markus Braun), please email: markus.braun@krawel.de
 
-If you think this plugin could be improved, fork on GitHub and send a pull
-request or just tell me your ideas.
+If you think this plugin could be improved, fork on Bitbucket or GitHub and
+send a pull request or just tell me your ideas.
 
+Bitbucket: https://bitbucket.org/embear/foldsearch
 GitHub: https://github.com/embear/vim-foldsearch
 
 ## Documentation
@@ -28,14 +32,18 @@ See `doc/foldsearch.txt` for details
 
 ## Changelog
 
+v1.1.0 : XXXX-YY-ZZ
+  - use vim autoload feature to load functions on demand
+  - better save/restore of modified options
+
 v1.0.1 : 2013-03-20
-- added |g:foldsearch_disable_mappings| config variable
+  - added |g:foldsearch_disable_mappings| config variable
 
 v1.0.0 : 2012-10-10
-- handle multiline regular expressions correctly
+  - handle multiline regular expressions correctly
 
 v2213 : 2008-07-26
-- fixed a bug in context handling
+  - fixed a bug in context handling
 
 v2209 : 2008-07-17
-- initial version
+  - initial version

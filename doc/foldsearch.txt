@@ -1,6 +1,6 @@
-*foldsearch.txt*             For Vim version 7.3    Last change: 2012 October 10
+*foldsearch.txt*             For Vim version 7.3   Last change: 2014 November 04
 
-foldsearch                 Version 1.0.0                            *foldsearch*
+foldsearch                 Version 1.1.0                            *foldsearch*
 
 |foldsearch-description|     Description
 |foldsearch-commands|        Commands
@@ -132,13 +132,13 @@ GitHub: https://github.com/embear/vim-foldsearch
 ==============================================================================
 CREDITS                                                     *foldsearch-credits*
 
-- Karl Mowatt-Wilson for bug reports
-- John Appleseed for patches
+  - Karl Mowatt-Wilson for bug reports
+  - John Appleseed for patches
 
 ==============================================================================
 CHANGELOG                                                 *foldsearch-changelog*
 
-v1.1.0 : 2014-11-03
+v1.1.0 : XXXX-YY-ZZ
   - use vim autoload feature to load functions on demand
   - better save/restore of modified options
 
