@@ -23,9 +23,6 @@ To contact the author (Markus Braun), please email: markus.braun@krawel.de
 If you think this plugin could be improved, fork on Bitbucket or GitHub and
 send a pull request or just tell me your ideas.
 
-Bitbucket: https://bitbucket.org/embear/foldsearch
-GitHub: https://github.com/embear/vim-foldsearch
-
 ## Documentation
 
 See `doc/foldsearch.txt` for details
