@@ -133,6 +133,7 @@ GitHub: https://github.com/embear/vim-foldsearch
 CREDITS                                                     *foldsearch-credits*
 
 - Karl Mowatt-Wilson for bug reports
+- John Appleseed for patches
 
 ==============================================================================
 CHANGELOG                                                 *foldsearch-changelog*

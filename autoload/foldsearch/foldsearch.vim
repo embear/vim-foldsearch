@@ -242,7 +242,7 @@ function! foldsearch#foldsearch#FoldSearchInit()
   endif
 
   " erase all folds to begin with
-  normal zE
+  normal! zE
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDo()  {{{2
@@ -272,7 +272,7 @@ function! foldsearch#foldsearch#FoldSearchDo()
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
   " move to the end of the file
-  normal $G$
+  normal! $G$
   let pattern_found = 0      " flag to set when search pattern found
   let fold_created = 0       " flag to set when a fold is found
   let flags = "w"            " allow wrapping in the search
@@ -306,7 +306,7 @@ function! foldsearch#foldsearch#FoldSearchDo()
   endwhile
 
   " now create the last fold which goes to the end of the file.
-  normal $G
+  normal! $G
   let  line_fold_end = line(".")
   if (line_fold_end  >= line_fold_start && pattern_found == 1)
     execute ":". line_fold_start . "," . line_fold_end . "fold"
@@ -325,7 +325,7 @@ function! foldsearch#foldsearch#FoldSearchDo()
   execute cursor_position
 
   " make this position the vertical center
-  normal zz
+  normal! zz
 
 endfunction
 
@@ -366,13 +366,13 @@ function! foldsearch#foldsearch#FoldSearchEnd()
   echo "Foldsearch ended"
 
   " open all folds for the current cursor position
-  silent! execute "normal " . foldlevel(line(".")) . "zo"
+  silent! execute "normal! " . foldlevel(line(".")) . "zo"
 
   " restore position before folding
   execute cursor_position
 
   " make this position the vertical center
-  normal zz
+  normal! zz
 
 endfunction
 
