@@ -1,160 +1,192 @@
-*foldsearch.txt*             For Vim version 7.3   Last change: 2014 November 04
+*foldsearch*  Foldsearch
 
-foldsearch                 Version 1.1.0                            *foldsearch*
+===============================================================================
+Contents ~
 
-|foldsearch-description|     Description
-|foldsearch-commands|        Commands
-|foldsearch-mappings|        Mappings
-|foldsearch-settings|        Settings
-|foldsearch-contribute|      Contribute
-|foldsearch-credits|         Credits
-|foldsearch-changelog|       Changelog
+ 1. Introduction                                      |foldsearch-introduction|
+ 2. Commands                                              |foldsearch-commands|
+  1. The |:Fw| command
+  2. The |:Fs| command
+  3. The |:Fp| command
+  4. The |:FS| command
+  5. The |:Fl| command
+  6. The |:Fc| command
+  7. The |:Fi| command
+  8. The |:Fd| command
+  9. The |:Fe| command
+ 3. Mappings                                              |foldsearch-mappings|
+ 4. Settings                                              |foldsearch-settings|
+  1. The |g:foldsearch_highlight| setting
+  2. The |g:foldsearch_disable_mappings| setting
+ 5. Contribute                                          |foldsearch-contribute|
+ 6. Credits                                                |foldsearch-credits|
+ 7. Changelog                                            |foldsearch-changelog|
+ 8. References                                          |foldsearch-references|
 
-==============================================================================
-DESCRIPTION                                             *foldsearch-description*
+===============================================================================
+                                                      *foldsearch-introduction*
+Introduction ~
 
 This plugin provides commands that fold away lines that don't match a specific
 search pattern. This pattern can be the word under the cursor, the last search
 pattern, a regular expression or spelling errors. There are also commands to
 change the context of the shown lines.
 
-==============================================================================
-COMMANDS                                                   *foldsearch-commands*
+The plugin can be found on Bitbucket [1], GitHub [2] and VIM online [3].
 
-------------------------------------------------------------------------------
-*:Fw* [context]
+===============================================================================
+                                                          *foldsearch-commands*
+Commands ~
 
-Show lines which contain the word under the cursor. Default [context] is
-current context.
+-------------------------------------------------------------------------------
+The *:Fw* command
 
-[context] can consist of one or two numbers. A 'unsigned' number defines the
-context before and after the pattern. If a number has a '-' prefix, it defines
-only the context before the pattern. If it has a '+' prefix, it defines only
-the context after a pattern.
+Show lines which contain the word under the cursor.
 
-------------------------------------------------------------------------------
-*:Fs* [context*]
+The optional _context_ option consists of one or two numbers:
 
-Show lines which contain previous search pattern. Default [context] is current
-context.
+- A 'unsigned' number defines the context before and after the pattern.
+- If a number has a '-' prefix, it defines only the context before the
+  pattern.
+- If it has a '+' prefix, it defines only the context after a pattern.
 
-------------------------------------------------------------------------------
-*:Fp* pattern
+Default _context_ is current context.
 
-Show the lines that contain the regular expression. Context is 0.
+-------------------------------------------------------------------------------
+The *:Fs* command
 
-See |regular-expression| for patterns that are accepted.
+Show lines which contain previous search pattern.
 
-------------------------------------------------------------------------------
-*:FS*
+For a description of the optional _context_ please see |:Fw|
+
+Default _context_ is current context.
+
+-------------------------------------------------------------------------------
+The *:Fp* command
+
+Show the lines that contain the given regular expression.
+
+Please see |regular-expression| for patterns that are accepted.
+
+-------------------------------------------------------------------------------
+The *:FS* command
 
 Show the lines that contain spelling errors.
 
-------------------------------------------------------------------------------
-*:Fl*
+-------------------------------------------------------------------------------
+The *:Fl* command
 
 Fold again with the last used pattern
 
-------------------------------------------------------------------------------
-*:Fc* [context]
+-------------------------------------------------------------------------------
+The *:Fc* command
 
-Show [context] lines around matching pattern.
+Show or modify current _context_ lines around matching pattern.
 
-------------------------------------------------------------------------------
-*:Fi*
+For a description of the optional _context_ option please see |:Fw|
 
-Increment context by one line.
+-------------------------------------------------------------------------------
+The *:Fi* command
 
-------------------------------------------------------------------------------
-*:Fd*
+Increment _context_ by one line.
 
-Decrement context by one line.
+-------------------------------------------------------------------------------
+The *:Fd* command
 
-------------------------------------------------------------------------------
-*:Fe*
+Decrement _context_ by one line.
 
-Set modified fold options to their previous value
+-------------------------------------------------------------------------------
+The *:Fe* command
 
-==============================================================================
-MAPPINGS                                                   *foldsearch-mappings*
+Set modified fold options to their previous value and end foldsearch.
 
-<Leader>fw     |:Fw| with current context.
-<Leader>fs     |:Fs| with current context.
-<Leader>fS     |:FS|
-<Leader>fl     |:Fl|
-<Leader>fi     |:Fi|
-<Leader>fd     |:Fd|
-<Leader>fe     |:Fe|
+===============================================================================
+                                                          *foldsearch-mappings*
+Mappings ~
+
+- 'Leader>fw' : |:Fw| with current context
+- 'Leader>fs' : |:Fs| with current context
+- 'Leader>fS' : |:FS|
+- 'Leader>fl' : |:Fl|
+- 'Leader>fi' : |:Fi|
+- 'Leader>fd' : |:Fd|
+- 'Leader>fe' : |:Fe|
 
 Mappings can be disabled by setting |g:foldsearch_disable_mappings| to 1
 
-==============================================================================
-SETTINGS                                                   *foldsearch-settings*
+===============================================================================
+                                                          *foldsearch-settings*
+Settings ~
 
-Use: >
-    let g:option_name=option_value
+Use: 'let g:option_name=option_value' to set them in your global vimrc.
 
-to set them in your global vimrc.
-
-------------------------------------------------------------------------------
-*g:foldsearch_highlight*
+-------------------------------------------------------------------------------
+The *g:foldsearch_highlight* setting
 
 Highlight the pattern used for folding.
 
-Value    Description~
-0        Don't highlight pattern.
-1        Highlight pattern.
+- Value '0': Don't highlight pattern
+- Value '1': Highlight pattern
+- Default: '0'
 
-Default: 0
+-------------------------------------------------------------------------------
+The *g:foldsearch_disable_mappings* setting
 
-------------------------------------------------------------------------------
-*g:foldsearch_disable_mappings*
+Disable the mappings. Use this to define your own mappings or to use the plugin
+via commands only.
 
-Disable the mappings. Use this to define your own mappings or to use the
-plugin via commands only.
+- Value '0': Don't disable mappings (use mappings)
+- Value '1': Disable Mappings
+- Default: '0'
 
-Value    Description~
-0        Don't disable mappings (use mappings)
-1        Disable Mappings
+===============================================================================
+                                                        *foldsearch-contribute*
+Contribute ~
 
-Default: 0
+To contact the author (Markus Braun), please send an email to
+markus.braun@krawel.de
 
-==============================================================================
-CONTRIBUTE                                               *foldsearch-contribute*
+If you think this plugin could be improved, fork on Bitbucket [1] or GitHub [2]
+and send a pull request or just tell me your ideas.
 
-To contact the author (Markus Braun), please email: markus.braun@krawel.de
+===============================================================================
+                                                           *foldsearch-credits*
+Credits ~
 
-If you think this plugin could be improved, fork on GitHub and send a pull
-request or just tell me your ideas.
+- Karl Mowatt-Wilson for bug reports
+- John Appleseed for patches
 
-Bitbucket: https://bitbucket.org/embear/foldsearch
-GitHub:    https://github.com/embear/vim-foldsearch
-
-==============================================================================
-CREDITS                                                     *foldsearch-credits*
-
-  - Karl Mowatt-Wilson for bug reports
-  - John Appleseed for patches
-
-==============================================================================
-CHANGELOG                                                 *foldsearch-changelog*
+===============================================================================
+                                                         *foldsearch-changelog*
+Changelog ~
 
 v1.1.0 : XXXX-YY-ZZ
-  - use vim autoload feature to load functions on demand
-  - better save/restore of modified options
+
+- use vim autoload feature to load functions on demand
+- better save/restore of modified options
 
 v1.0.1 : 2013-03-20
-  - added |g:foldsearch_disable_mappings| config variable
+
+- added |g:foldsearch_disable_mappings| config variable
 
 v1.0.0 : 2012-10-10
-  - handle multiline regular expressions correctly
+
+- handle multiline regular expressions correctly
 
 v2213 : 2008-07-26
-  - fixed a bug in context handling
+
+- fixed a bug in context handling
 
 v2209 : 2008-07-17
-  - initial version
 
-==============================================================================
+- initial version
 
-vim:tw=78:ts=8:ft=help:norl:
+===============================================================================
+                                                        *foldsearch-references*
+References ~
+
+[1] https://bitbucket.org/embear/foldsearch
+[2] https://github.com/embear/vim-foldsearch
+[3] http://www.vim.org/scripts/script.php?script_id=2302
+
+vim: ft=help
