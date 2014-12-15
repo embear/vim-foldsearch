@@ -7,7 +7,8 @@
   5. Push release to [Bitbucket] and [GitHub]:
     - `hg push ssh://hg@bitbucket.org/embear/foldsearch`
     - `hg push git+ssh://git@github.com:embear/vim-foldsearch.git`
-  6. Update [VIM online]
+  6. Create a Vimball archive: `hg locate | vim -C -c '%MkVimball! foldsearch .' -c 'q!' -`
+  7. Update [VIM online]
 
 [Bitbucket]: https://bitbucket.org/embear/foldsearch
 [GitHub]: https://github.com/embear/vim-foldsearch
