@@ -108,7 +108,7 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
-v1.1.0 : XXXX-YY-ZZ
+v1.1.0 : 2014-12-15
 
   - use vim autoload feature to load functions on demand
   - better save/restore of modified options
