@@ -263,7 +263,7 @@ function! foldsearch#foldsearch#FoldSearchDo()
   " highlight search pattern if requested
   if (g:foldsearch_highlight == 1)
     if (exists("w:foldsearch_highlight_id"))
-      matchdelete(w:foldsearch_highlight_id)
+      call matchdelete(w:foldsearch_highlight_id)
     endif
     let w:foldsearch_highlight_id = matchadd("Search", w:foldsearch_pattern)
   endif
@@ -366,7 +366,7 @@ function! foldsearch#foldsearch#FoldSearchEnd()
   echo "Foldsearch ended"
 
   " open all folds for the current cursor position
-  silent! execute "normal! " . foldlevel(line(".")) . "zo"
+  normal! zv
 
   " restore position before folding
   execute cursor_position
