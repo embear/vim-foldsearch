@@ -108,6 +108,10 @@ send a pull request or just tell me your ideas.
 
 ## Changelog
 
+v1.1.1 : 2014-12-17
+
+  - bugfix: add missing `call` to ex command
+
 v1.1.0 : 2014-12-15
 
   - use vim autoload feature to load functions on demand
