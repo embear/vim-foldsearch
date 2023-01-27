@@ -5,7 +5,7 @@ search pattern. This pattern can be the word under the cursor, the last search
 pattern, a regular expression or spelling errors. There are also commands to
 change the context of the shown lines.
 
-The plugin can be found on [Bitbucket], [GitHub] and [VIM online].
+The plugin can be found on [GitHub] and [VIM online].
 
 ## Commands
 
@@ -98,8 +98,8 @@ plugin via commands only.
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
 
-If you think this plugin could be improved, fork on [Bitbucket] or [GitHub] and
-send a pull request or just tell me your ideas.
+If you think this plugin could be improved, fork on [GitHub] and send a pull
+request or just tell me your ideas.
 
 ## Credits
 
@@ -130,6 +130,5 @@ v2209 : 2008-07-17
   - initial version
 
 
-[Bitbucket]: https://bitbucket.org/embear/foldsearch
 [GitHub]: https://github.com/embear/vim-foldsearch
 [VIM online]: http://www.vim.org/scripts/script.php?script_id=2302
