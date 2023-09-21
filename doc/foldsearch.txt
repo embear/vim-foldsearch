@@ -18,6 +18,7 @@ Contents ~
  4. Settings                                              |foldsearch-settings|
   1. The |g:foldsearch_highlight| setting
   2. The |g:foldsearch_disable_mappings| setting
+  3. The |g:foldsearch_scope| setting
  5. Contribute                                          |foldsearch-contribute|
  6. Credits                                                |foldsearch-credits|
  7. Changelog                                            |foldsearch-changelog|
@@ -32,7 +33,7 @@ search pattern. This pattern can be the word under the cursor, the last search
 pattern, a regular expression or spelling errors. There are also commands to
 change the context of the shown lines.
 
-The plugin can be found on Bitbucket [1], GitHub [2] and VIM online [3].
+The plugin can be found on GitHub [1] and VIM online [2].
 
 ===============================================================================
                                                           *foldsearch-commands*
@@ -139,6 +140,18 @@ via commands only.
 - Value '1': Disable Mappings
 - Default: '0'
 
+-------------------------------------------------------------------------------
+The *g:foldsearch_scope* setting
+
+Scope for which pattern, display context, original view etc. are stored. If
+'window' is used, then different types of foldsearch can be done for the same
+buffer displayed in several windows. if `buffer? is used, then different types
+of foldsearch can be done for several buffers displayed in the same window.
+
+- Value 'window': Use window scope to store data
+- Value 'buffer': Use buffer scope to store data
+- Default: 'window'
+
 ===============================================================================
                                                         *foldsearch-contribute*
 Contribute ~
@@ -146,8 +159,8 @@ Contribute ~
 To contact the author (Markus Braun), please send an email to
 markus.braun@krawel.de
 
-If you think this plugin could be improved, fork on Bitbucket [1] or GitHub [2]
-and send a pull request or just tell me your ideas.
+If you think this plugin could be improved, fork on GitHub [1] and send a pull
+request or just tell me your ideas.
 
 ===============================================================================
                                                            *foldsearch-credits*
@@ -155,10 +168,15 @@ Credits ~
 
 - Karl Mowatt-Wilson for bug reports
 - John Appleseed for patches
+- Adam Szaj for the idea of different scopes
 
 ===============================================================================
                                                          *foldsearch-changelog*
 Changelog ~
+
+v1.2.0 : XXXX-XX-XX
+
+- add abilitiy to choose the scope of foldsearch commands
 
 v1.1.1 : 2014-12-17
 
@@ -189,8 +207,7 @@ v2209 : 2008-07-17
                                                         *foldsearch-references*
 References ~
 
-[1] https://bitbucket.org/embear/foldsearch
-[2] https://github.com/embear/vim-foldsearch
-[3] http://www.vim.org/scripts/script.php?script_id=2302
+[1] https://github.com/embear/vim-foldsearch
+[2] http://www.vim.org/scripts/script.php?script_id=2302
 
 vim: ft=help

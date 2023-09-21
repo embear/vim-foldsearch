@@ -94,6 +94,18 @@ plugin via commands only.
   - Value `1`: Disable Mappings
   - Default: `0`
 
+### The `g:foldsearch_scope` setting
+
+Scope for which pattern, display context, original view etc. are stored.
+If `window` is used, then different types of foldsearch can be done for the
+same buffer displayed in several windows. if `buffer? is used, then different
+types of foldsearch can be done for several buffers displayed in the same
+window.
+
+  - Value `window`: Use window scope to store data
+  - Value `buffer`: Use buffer scope to store data
+  - Default: `window`
+
 ## Contribute
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
@@ -105,8 +117,13 @@ request or just tell me your ideas.
 
   - Karl Mowatt-Wilson for bug reports
   - John Appleseed for patches
+  - Adam Szaj for the idea of different scopes
 
 ## Changelog
+
+v1.2.0 : XXXX-XX-XX
+
+  - add abilitiy to choose the scope of foldsearch commands
 
 v1.1.1 : 2014-12-17
 
