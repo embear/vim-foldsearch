@@ -44,6 +44,17 @@ if (!exists("g:foldsearch_debug"))
   let g:foldsearch_debug = 0
 endif
 
+" define default "foldsearch_scope" {{{2
+if (!exists("g:foldsearch_scope"))
+  let g:Foldsearch_scope_id = function("win_getid")
+elseif g:foldsearch_scope == "window"
+  let g:Foldsearch_scope_id = function("win_getid")
+elseif g:foldsearch_scope == "buffer"
+  let g:Foldsearch_scope_id = function("bufnr")
+else
+  let g:Foldsearch_scope_id = function("win_getid")
+endif
+
 " Section: Commands {{{1
 
 command! -nargs=* -complete=command Fs call foldsearch#foldsearch#FoldSearch(<f-args>)
