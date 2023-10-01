@@ -121,7 +121,7 @@ request or just tell me your ideas.
 
 ## Changelog
 
-v1.2.0 : XXXX-XX-XX
+v1.2.0 : 2023-10-01
 
   - add abilitiy to choose the scope of foldsearch commands
 
