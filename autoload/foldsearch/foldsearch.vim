@@ -388,7 +388,7 @@ function! foldsearch#foldsearch#FoldSearchEnd()
 
   " restore the folds before foldsearch
   if (!empty(config.viewfile))
-    execute "silent! source " . config.viewfile
+    execute "silent! noautocmd source " . config.viewfile
     call delete(config.viewfile)
     let config.viewfile = ''
 
