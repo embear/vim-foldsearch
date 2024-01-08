@@ -266,10 +266,10 @@ function! foldsearch#foldsearch#FoldSearchInit(config)
     let a:config.foldminlines = &foldminlines
 
     " modify settings
-    let &foldtext = ""
-    let &foldmethod = "manual"
-    let &foldenable = 1
-    let &foldminlines = 0
+    let &l:foldtext = ""
+    let &l:foldmethod = "manual"
+    let &l:foldenable = 1
+    let &l:foldminlines = 0
 
     " create a file for view options
     let a:config.viewfile = tempname()
