@@ -257,14 +257,8 @@ function! foldsearch#foldsearch#FoldSearchEnd()
   " give a message to the user
   echo "Foldsearch ended"
 
-  " open all folds for the current cursor position
-  normal! zv
-
   " restore position before folding
   execute cursor_position
-
-  " make this position the vertical center
-  normal! zz
 
   " save configuration for this scope
   call foldsearch#foldsearch#SetConfig(l:config)
@@ -417,9 +411,6 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
 
   " restore position before folding
   execute cursor_position
-
-  " make this position the vertical center
-  normal! zz
 
   return l:config
 endfunction
