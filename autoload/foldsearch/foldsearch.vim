@@ -60,22 +60,19 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldCword(...)
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
   " define the search pattern
-  let config.pattern = '\<'.expand("<cword>").'\>'
+  let l:config.pattern = '\<'.expand("<cword>").'\>'
 
   " determine the number of context lines
-  if (a:0 ==  0)
-    call foldsearch#foldsearch#FoldSearchDo(config)
-  elseif (a:0 == 1)
-    call foldsearch#foldsearch#FoldSearchContext(config, a:1)
-  elseif (a:0 == 2)
-    call foldsearch#foldsearch#FoldSearchContext(config, a:1, a:2)
-  endif
+  let l:config = foldsearch#foldsearch#FoldSearchUpdateContext(l:config, a:000)
+
+  " do the actual search
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearch(...) {{{2
@@ -84,22 +81,19 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldSearch(...)
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
   " define the search pattern
-  let config.pattern = @/
+  let l:config.pattern = @/
 
   " determine the number of context lines
-  if (a:0 == 0)
-    call foldsearch#foldsearch#FoldSearchDo(config)
-  elseif (a:0 == 1)
-    call foldsearch#foldsearch#FoldSearchContext(config, a:1)
-  elseif (a:0 == 2)
-    call foldsearch#foldsearch#FoldSearchContext(config, a:1, a:2)
-  endif
+  let l:config = foldsearch#foldsearch#FoldSearchUpdateContext(l:config, a:000)
+
+  " do the actual search
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldPattern(pattern) {{{2
@@ -108,16 +102,16 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldPattern(pattern)
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
   " define the search pattern
-  let config.pattern = a:pattern
+  let l:config.pattern = a:pattern
 
   " call the folding function
-  call foldsearch#foldsearch#FoldSearchDo(config)
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSpell(...)  {{{2
@@ -126,7 +120,7 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldSpell(...)
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
   " if foldsearch_pattern is not defined, then exit
   if (!&spell)
@@ -134,40 +128,37 @@ function! foldsearch#foldsearch#FoldSpell(...)
     return
   endif
 
-  let config.pattern = ''
+  let l:config.pattern = ''
 
   " do the search (only search for the first spelling error in line)
   let lnum = 1
   while lnum <= line("$")
     let bad_word = spellbadword(getline(lnum))[0]
     if bad_word != ''
-      if empty(config.pattern)
-        let config.pattern = '\<\(' . bad_word
+      if empty(l:config.pattern)
+        let l:config.pattern = '\<\(' . bad_word
       else
-        let config.pattern = config.pattern . '\|' . bad_word
+        let l:config.pattern = l:config.pattern . '\|' . bad_word
       endif
     endif
     let lnum = lnum + 1
   endwhile
 
-  let config.pattern = config.pattern . '\)\>'
+  let l:config.pattern = l:config.pattern . '\)\>'
 
   " report if pattern not found and thus no fold created
-  if (empty(config.pattern))
+  if (empty(l:config.pattern))
     echo "No spelling errors found!"
   else
-    " determine the number of context lines
-    if (a:0 == 0)
-      call foldsearch#foldsearch#FoldSearchDo(config)
-    elseif (a:0 == 1)
-      call foldsearch#foldsearch#FoldSearchContext(config, a:1)
-    elseif (a:0 == 2)
-      call foldsearch#foldsearch#FoldSearchContext(config, a:1, a:2)
-    endif
+  " determine the number of context lines
+    let l:config = foldsearch#foldsearch#FoldSearchUpdateContext(l:config, a:000)
+
+    " do the actual search
+    let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
   endif
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldLast(...) {{{2
@@ -176,55 +167,36 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldLast()
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
-  if (empty(config.pattern))
+  if (empty(l:config.pattern))
     return
   endif
 
   " call the folding function
-  call foldsearch#foldsearch#FoldSearchDo(config)
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
-" Function: foldsearch#foldsearch#FoldSearchContext(config, ...) {{{2
+" Function: foldsearch#foldsearch#FoldSearchContext(...) {{{2
 "
 " Set the context of the folds to the given value
 "
-function! foldsearch#foldsearch#FoldSearchContext(config, ...)
+function! foldsearch#foldsearch#FoldSearchContext(...)
+  " get configuration for this scope
+  let l:config = foldsearch#foldsearch#GetConfig()
+
   if (a:0 == 0)
     " if no new context is given display current and exit
-    echo "Foldsearch context: pre=".a:config.context_pre." post=".a:config.context_post
-    return
+    echo "Foldsearch context: pre = ".l:config.context_pre." lines; post = ".l:config.context_post . " lines"
   else
-    let number=1
-    let a:config.context_pre = 0
-    let a:config.context_post = 0
-    while number <= a:0
-      execute "let argument = a:" . number . ""
-      if (strpart(argument, 0, 1) == "-")
-	let a:config.context_pre = strpart(argument, 1)
-      elseif (strpart(argument, 0, 1) == "+")
-	let a:config.context_post = strpart(argument, 1)
-      else
-	let a:config.context_pre = argument
-	let a:config.context_post = argument
-      endif
-      let number = number + 1
-    endwhile
-  endif
-
-  if (a:config.context_pre < 0)
-    let a:config.context_pre = 0
-  endif
-  if (a:config.context_post < 0)
-    let a:config.context_post = 0
+    call foldsearch#foldsearch#FoldSearchUpdateContext(l:config, a:000)
   endif
 
   " call the folding function
-  call foldsearch#foldsearch#FoldSearchDo(a:config)
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldContextAdd(change) {{{2
@@ -233,28 +205,74 @@ endfunction
 "
 function! foldsearch#foldsearch#FoldContextAdd(change)
   " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
+  let l:config = foldsearch#foldsearch#GetConfig()
 
-  let config.context_pre = config.context_pre + a:change
-  let config.context_post = config.context_post + a:change
+  let l:config.context_pre = l:config.context_pre + a:change
+  let l:config.context_post = l:config.context_post + a:change
 
-  if (config.context_pre < 0)
-    let config.context_pre = 0
+  if (l:config.context_pre < 0)
+    let l:config.context_pre = 0
   endif
-  if (config.context_post < 0)
-    let config.context_post = 0
+  if (l:config.context_post < 0)
+    let l:config.context_post = 0
   endif
 
   " call the folding function
-  call foldsearch#foldsearch#FoldSearchDo(config)
+  let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
   " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  call foldsearch#foldsearch#SetConfig(l:config)
+endfunction
+
+" Function: foldsearch#foldsearch#FoldSearchEnd() {{{2
+"
+" End the fold search and restore the saved settings
+"
+function! foldsearch#foldsearch#FoldSearchEnd()
+  " get configuration for this scope
+  let l:config = foldsearch#foldsearch#GetConfig()
+
+  " save cursor position
+  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
+
+  " restore the folds before foldsearch
+  if (!empty(l:config.viewfile))
+    execute "silent! noautocmd source " . l:config.viewfile
+    call delete(l:config.viewfile)
+    let l:config.viewfile = ''
+
+    " restore user settings before making changes
+    let &foldtext = l:config.foldtext
+    let &foldmethod = l:config.foldmethod
+    let &foldenable = l:config.foldenable
+    let &foldminlines = l:config.foldminlines
+  endif
+
+  " delete highlighting
+  if (!empty(l:config.highlight_id))
+    call matchdelete(l:config.highlight_id)
+    let l:config.highlight_id = ''
+  endif
+
+  " give a message to the user
+  echo "Foldsearch ended"
+
+  " open all folds for the current cursor position
+  normal! zv
+
+  " restore position before folding
+  execute cursor_position
+
+  " make this position the vertical center
+  normal! zz
+
+  " save configuration for this scope
+  call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchInit(config) {{{2
 "
-" initialize fold searching for current buffer
+" initialize fold searching for current buffer and return updated config
 "
 function! foldsearch#foldsearch#FoldSearchInit(config)
   " save current setup
@@ -289,6 +307,36 @@ function! foldsearch#foldsearch#FoldSearchInit(config)
 
   " erase all folds to begin with
   normal! zE
+
+  return a:config
+endfunction
+
+" Function: foldsearch#foldsearch#FoldSearchUpdateContext(config, ...) {{{2
+"
+" Update the context in the given config and return updated config
+"
+function! foldsearch#foldsearch#FoldSearchUpdateContext(config, args)
+  let idx = 0
+  while idx < len(a:args)
+    if (strpart(a:args[idx], 0, 1) == "-")
+      let a:config.context_pre = strpart(a:args[idx], 1)
+    elseif (strpart(a:args[idx], 0, 1) == "+")
+      let a:config.context_post = strpart(a:args[idx], 1)
+    else
+      let a:config.context_pre = a:args[idx]
+      let a:config.context_post = a:args[idx]
+    endif
+    let idx = idx + 1
+  endwhile
+
+  if (a:config.context_pre < 0)
+    let a:config.context_pre = 0
+  endif
+  if (a:config.context_post < 0)
+    let a:config.context_post = 0
+  endif
+
+  return a:config
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDo(config)  {{{2
@@ -304,14 +352,14 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
   endif
 
   " initialize fold search for this buffer
-  call foldsearch#foldsearch#FoldSearchInit(a:config)
+  let l:config = foldsearch#foldsearch#FoldSearchInit(a:config)
 
   " highlight search pattern if requested
   if (g:foldsearch_highlight == 1)
-    if (!empty(a:config.highlight_id))
-      call matchdelete(a:config.highlight_id)
+    if (!empty(l:config.highlight_id))
+      call matchdelete(l:config.highlight_id)
     endif
-    let a:config.highlight_id = matchadd("Search", a:config.pattern)
+    let l:config.highlight_id = matchadd("Search", l:config.pattern)
   endif
 
   " save cursor position
@@ -325,12 +373,12 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
   let line_fold_start =  0   " set marker for beginning of fold
 
   " do the search
-  while search(a:config.pattern, flags) > 0
+  while search(l:config.pattern, flags) > 0
     " patern had been found
     let pattern_found = 1
 
     " determine end of fold
-    let line_fold_end = line(".") - 1 - a:config.context_pre
+    let line_fold_end = line(".") - 1 - l:config.context_pre
 
     " validate line of fold end and set fold
     if (line_fold_end >= line_fold_start && line_fold_end != 0)
@@ -342,10 +390,10 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
     endif
 
     " jump to the end of this match. needed for multiline searches
-    call search(a:config.pattern, flags . "ce")
+    call search(l:config.pattern, flags . "ce")
 
     " update marker
-    let line_fold_start = line(".") + 1 + a:config.context_post
+    let line_fold_start = line(".") + 1 + l:config.context_post
 
     " turn off wrapping
     let flags = "W"
@@ -373,52 +421,7 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
   " make this position the vertical center
   normal! zz
 
-endfunction
-
-" Function: foldsearch#foldsearch#FoldSearchEnd() {{{2
-"
-" End the fold search and restore the saved settings
-"
-function! foldsearch#foldsearch#FoldSearchEnd()
-  " get configuration for this scope
-  let config = foldsearch#foldsearch#GetConfig()
-
-  " save cursor position
-  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
-
-  " restore the folds before foldsearch
-  if (!empty(config.viewfile))
-    execute "silent! noautocmd source " . config.viewfile
-    call delete(config.viewfile)
-    let config.viewfile = ''
-
-    " restore user settings before making changes
-    let &foldtext = config.foldtext
-    let &foldmethod = config.foldmethod
-    let &foldenable = config.foldenable
-    let &foldminlines = config.foldminlines
-  endif
-
-  " delete highlighting
-  if (!empty(config.highlight_id))
-    call matchdelete(config.highlight_id)
-    let config.highlight_id = ''
-  endif
-
-  " give a message to the user
-  echo "Foldsearch ended"
-
-  " open all folds for the current cursor position
-  normal! zv
-
-  " restore position before folding
-  execute cursor_position
-
-  " make this position the vertical center
-  normal! zz
-
-  " save configuration for this scope
-  call foldsearch#foldsearch#SetConfig(config)
+  return l:config
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDebug(level, text) {{{2
