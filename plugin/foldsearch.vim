@@ -61,11 +61,12 @@ command! -nargs=* -complete=command Fs call foldsearch#foldsearch#FoldSearch(<f-
 command! -nargs=* -complete=command Fw call foldsearch#foldsearch#FoldCword(<f-args>)
 command! -nargs=1 Fp call foldsearch#foldsearch#FoldPattern(<q-args>)
 command! -nargs=* -complete=command FS call foldsearch#foldsearch#FoldSpell(<f-args>)
+command! -nargs=0 Ft call foldsearch#foldsearch#FoldToggle()
 command! -nargs=0 Fl call foldsearch#foldsearch#FoldLast()
 command! -nargs=* Fc call foldsearch#foldsearch#FoldSearchContext(<f-args>)
 command! -nargs=0 Fi call foldsearch#foldsearch#FoldContextAdd(+1)
 command! -nargs=0 Fd call foldsearch#foldsearch#FoldContextAdd(-1)
-command! -nargs=0 Fe call foldsearch#foldsearch#FoldSearchEnd()
+command! -nargs=0 Fe call foldsearch#foldsearch#FoldEnd()
 
 " Section: Mappings {{{1
 
@@ -73,10 +74,11 @@ if !g:foldsearch_disable_mappings
    map <Leader>fs :call foldsearch#foldsearch#FoldSearch()<CR>
    map <Leader>fw :call foldsearch#foldsearch#FoldCword()<CR>
    map <Leader>fS :call foldsearch#foldsearch#FoldSpell()<CR>
+   map <Leader>ft :call foldsearch#foldsearch#FoldToggle()<CR>
    map <Leader>fl :call foldsearch#foldsearch#FoldLast()<CR>
    map <Leader>fi :call foldsearch#foldsearch#FoldContextAdd(+1)<CR>
    map <Leader>fd :call foldsearch#foldsearch#FoldContextAdd(-1)<CR>
-   map <Leader>fe :call foldsearch#foldsearch#FoldSearchEnd()<CR>
+   map <Leader>fe :call foldsearch#foldsearch#FoldEnd()<CR>
 endif
 
 " Section: Menu {{{1
@@ -89,6 +91,7 @@ if has("menu")
   amenu <silent> Plugin.FoldSearch.Current\ Word :Fw<CR>
   amenu <silent> Plugin.FoldSearch.Pattern :Fp
   amenu <silent> Plugin.FoldSearch.Spelling :FS<CR>
+  amenu <silent> Plugin.FoldSearch.Toggle :Ft<CR>
   amenu <silent> Plugin.FoldSearch.Last :Fl<CR>
   amenu <silent> Plugin.FoldSearch.End :Fe<CR>
 endif

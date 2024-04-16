@@ -33,6 +33,7 @@ function foldsearch#foldsearch#GetConfig()
     return s:foldsearch_data[scope]
   else
     return {
+          \ 'active' : 0,
           \ 'pattern' : '',
           \ 'context_pre': 0,
           \ 'context_post': 0,
@@ -116,7 +117,7 @@ endfunction
 
 " Function: foldsearch#foldsearch#FoldSpell(...)  {{{2
 "
-" do the search and folding based on spellchecker
+" Do the search and folding based on spellchecker
 "
 function! foldsearch#foldsearch#FoldSpell(...)
   " get configuration for this scope
@@ -169,10 +170,6 @@ function! foldsearch#foldsearch#FoldLast()
   " get configuration for this scope
   let l:config = foldsearch#foldsearch#GetConfig()
 
-  if (empty(l:config.pattern))
-    return
-  endif
-
   " call the folding function
   let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
 
@@ -224,41 +221,35 @@ function! foldsearch#foldsearch#FoldContextAdd(change)
   call foldsearch#foldsearch#SetConfig(l:config)
 endfunction
 
-" Function: foldsearch#foldsearch#FoldSearchEnd() {{{2
+" Function: foldsearch#foldsearch#FoldToggle() {{{2
 "
-" End the fold search and restore the saved settings
+" Toggle between fold search and saved view
 "
-function! foldsearch#foldsearch#FoldSearchEnd()
+function! foldsearch#foldsearch#FoldToggle()
   " get configuration for this scope
   let l:config = foldsearch#foldsearch#GetConfig()
 
-  " save cursor position
-  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
-
-  " restore the folds before foldsearch
-  if (!empty(l:config.viewfile))
-    execute "silent! noautocmd source " . l:config.viewfile
-    call delete(l:config.viewfile)
-    let l:config.viewfile = ''
-
-    " restore user settings before making changes
-    let &foldtext = l:config.foldtext
-    let &foldmethod = l:config.foldmethod
-    let &foldenable = l:config.foldenable
-    let &foldminlines = l:config.foldminlines
+  if (empty(l:config.active))
+    let l:config = foldsearch#foldsearch#FoldSearchDo(l:config)
+  else
+    let l:config = foldsearch#foldsearch#FoldSearchUndo(l:config)
   endif
 
-  " delete highlighting
-  if (!empty(l:config.highlight_id))
-    call matchdelete(l:config.highlight_id)
-    let l:config.highlight_id = ''
-  endif
+  " save configuration for this scope
+  call foldsearch#foldsearch#SetConfig(l:config)
+endfunction
 
-  " give a message to the user
-  echo "Foldsearch ended"
 
-  " restore position before folding
-  execute cursor_position
+" Function: foldsearch#foldsearch#FoldEnd() {{{2
+"
+" End the fold search and restore the saved settings
+"
+function! foldsearch#foldsearch#FoldEnd()
+  " get configuration for this scope
+  let l:config = foldsearch#foldsearch#GetConfig()
+
+  " undo modification done for foldsearch
+  let l:config = foldsearch#foldsearch#FoldSearchUndo(l:config)
 
   " save configuration for this scope
   call foldsearch#foldsearch#SetConfig(l:config)
@@ -266,7 +257,7 @@ endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchInit(config) {{{2
 "
-" initialize fold searching for current buffer and return updated config
+" Initialize fold searching for current buffer and return updated config
 "
 function! foldsearch#foldsearch#FoldSearchInit(config)
   " save current setup
@@ -335,14 +326,14 @@ endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDo(config)  {{{2
 "
-" do the search and folding based on config.pattern and
+" Do the search and folding based on config.pattern and
 " config.context
 "
 function! foldsearch#foldsearch#FoldSearchDo(config)
   " if foldsearch_pattern is not defined, then exit
   if (empty(a:config.pattern))
     echo "No search pattern defined, ending fold search"
-    return
+    return a:config
   endif
 
   " initialize fold search for this buffer
@@ -412,7 +403,49 @@ function! foldsearch#foldsearch#FoldSearchDo(config)
   " restore position before folding
   execute cursor_position
 
+  " signal currently active fold search
+  let l:config.active = 1
+
   return l:config
+endfunction
+
+" Function: foldsearch#foldsearch#FoldSearchUndo() {{{2
+"
+" End the fold search and restore the saved settings
+"
+function! foldsearch#foldsearch#FoldSearchUndo(config)
+  " save cursor position
+  let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
+
+  " restore the folds before foldsearch
+  if (!empty(a:config.viewfile))
+    execute "silent! noautocmd source " . a:config.viewfile
+    call delete(a:config.viewfile)
+    let a:config.viewfile = ''
+
+    " restore user settings before making changes
+    let &foldtext = a:config.foldtext
+    let &foldmethod = a:config.foldmethod
+    let &foldenable = a:config.foldenable
+    let &foldminlines = a:config.foldminlines
+  endif
+
+  " delete highlighting
+  if (!empty(a:config.highlight_id))
+    call matchdelete(a:config.highlight_id)
+    let a:config.highlight_id = ''
+  endif
+
+  " give a message to the user
+  echo "Foldsearch ended"
+
+  " restore position before folding
+  execute cursor_position
+
+  " signal currently inactive fold search
+  let a:config.active = 0
+
+  return a:config
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchDebug(level, text) {{{2

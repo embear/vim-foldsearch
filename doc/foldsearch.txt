@@ -9,11 +9,12 @@ Contents ~
   2. The |:Fs| command
   3. The |:Fp| command
   4. The |:FS| command
-  5. The |:Fl| command
-  6. The |:Fc| command
-  7. The |:Fi| command
-  8. The |:Fd| command
-  9. The |:Fe| command
+  5. The |:Ft| command
+  6. The |:Fl| command
+  7. The |:Fc| command
+  8. The |:Fi| command
+  9. The |:Fd| command
+  10. The |:Fe| command
  3. Mappings                                              |foldsearch-mappings|
  4. Settings                                              |foldsearch-settings|
   1. The |g:foldsearch_highlight| setting
@@ -75,6 +76,11 @@ The *:FS* command
 Show the lines that contain spelling errors.
 
 -------------------------------------------------------------------------------
+The *:Ft* command
+
+Toggle between foldsearch view and original view.
+
+-------------------------------------------------------------------------------
 The *:Fl* command
 
 Fold again with the last used pattern
@@ -108,6 +114,7 @@ Mappings ~
 - '<Leader>fw' : |:Fw| with current context
 - '<Leader>fs' : |:Fs| with current context
 - '<Leader>fS' : |:FS|
+- '<Leader>ft' : |:Ft|
 - '<Leader>fl' : |:Fl|
 - '<Leader>fi' : |:Fi|
 - '<Leader>fd' : |:Fd|
@@ -174,8 +181,9 @@ Credits ~
                                                          *foldsearch-changelog*
 Changelog ~
 
-v1.2.1 : XXXX-XX-XX
+vX.X.X : XXXX-XX-XX
 
+- add ability to toggle between foldsearch and original view
 - bugfix: refactoring to make ':Fc:' work again
 
 v1.2.0 : 2023-10-01

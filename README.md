@@ -39,6 +39,10 @@ Please see |regular-expression| for patterns that are accepted.
 
 Show the lines that contain spelling errors.
 
+### The `:Ft` command
+
+Toggle between foldsearch view and original view.
+
 ### The `:Fl` command
 
 Fold again with the last used pattern
@@ -66,6 +70,7 @@ Set modified fold options to their previous value and end foldsearch.
   - `<Leader>fw` : `:Fw` with current context
   - `<Leader>fs` : `:Fs` with current context
   - `<Leader>fS` : `:FS`
+  - `<Leader>ft` : `:Ft`
   - `<Leader>fl` : `:Fl`
   - `<Leader>fi` : `:Fi`
   - `<Leader>fd` : `:Fd`
@@ -120,6 +125,11 @@ request or just tell me your ideas.
   - Adam Szaj for the idea of different scopes
 
 ## Changelog
+
+vX.X.X : XXXX-XX-XX
+
+  - add ability to toggle between foldsearch and original view
+  - bugfix: refactoring to make ':Fc:' work again
 
 v1.2.0 : 2023-10-01
 
