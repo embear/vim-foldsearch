@@ -340,6 +340,15 @@ function! s:DoFolding(config)
       call matchdelete(a:config.highlight_id)
     endif
     let a:config.highlight_id = matchadd("Search", a:config.pattern)
+
+    " in case of 'ignorecase' beeing set and the pattern does not force case
+    " then modify the pattern to ignore case
+    if &ignorecase == 1 && a:config.pattern !~# '\\\@<!\\C'
+      let l:modifier = '\c'
+    else
+      let l:modifier = ''
+    endif
+    let a:config.highlight_id = matchadd("Search", l:modifier.a:config.pattern)
   endif
 
   " save cursor position
