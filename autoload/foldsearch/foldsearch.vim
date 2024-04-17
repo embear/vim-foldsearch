@@ -339,7 +339,6 @@ function! s:DoFolding(config)
     if (!empty(a:config.highlight_id))
       call matchdelete(a:config.highlight_id)
     endif
-    let a:config.highlight_id = matchadd("Search", a:config.pattern)
 
     " in case of 'ignorecase' beeing set and the pattern does not force case
     " then modify the pattern to ignore case
