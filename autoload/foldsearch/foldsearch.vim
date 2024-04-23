@@ -277,6 +277,8 @@ function! s:Initialize(config)
     let a:config.viewfile = tempname()
 
     " make a view of the current file for later restore of manual folds
+    " NOTE: for unnamed buffers the view files does not store manually created
+    "       folds and they will be lost!
     let l:viewoptions = &viewoptions
     let &viewoptions = "folds"
     execute "mkview " . a:config.viewfile
@@ -289,7 +291,7 @@ function! s:Initialize(config)
     call writefile(l:lines, a:config.viewfile)
   endif
 
-  " erase all folds to begin with
+  " delete all manual folds to get a clean starting point
   normal! zE
 endfunction
 
@@ -417,6 +419,10 @@ endfunction
 function! s:UndoFolding(config)
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
+
+  " for unnamed buffers manual folds are not stored in the view file and
+  " the view file also does not delete manual folds -> delete them manually
+  normal! zE
 
   " restore the folds before foldsearch
   if (!empty(a:config.viewfile))
