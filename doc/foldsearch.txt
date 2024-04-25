@@ -181,10 +181,15 @@ Credits ~
                                                          *foldsearch-changelog*
 Changelog ~
 
-vX.X.X : XXXX-XX-XX
+v1.3.0 : 2024-04-25
 
-- add ability to toggle between foldsearch and original view
-- bugfix: refactoring to make ':Fc:' work again
+- add ability to toggle between foldsearch and original view with |:Ft|
+- respect 'ignorecase' setting for pattern highlighting
+- bugfix: refactoring to make |:Fc| work again
+- bugfix: disable autocommands when restoring previous view to prevent
+  unexpected side effects
+- bugfix: for unnamed buffers folds were not correctly restored when
+  foldsearch is finished
 
 v1.2.0 : 2023-10-01
 
