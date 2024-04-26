@@ -18,11 +18,10 @@
 "
 " Section: Plugin header {{{1
 
-" initialize foldsearch_data {{{2
-let s:foldsearch_data = {}
-
-" initialize debug message buffer {{{2
-let s:foldsearch_debug_message = []
+" define default "foldsearch_highlight" {{{2
+if (!exists("g:foldsearch_highlight"))
+  let g:foldsearch_highlight = 0
+endif
 
 " define default "foldsearch_debug" {{{2
 if (!exists("g:foldsearch_debug"))
@@ -34,6 +33,23 @@ let s:foldsearch_debug_lines = 100
 if (exists("g:foldsearch_debug_lines"))
   let s:foldsearch_debug_lines = g:foldsearch_debug_lines
 endif
+
+" define default "foldsearch_scope" {{{2
+if (!exists("g:foldsearch_scope"))
+  let s:Foldsearch_scope_id = function("win_getid")
+elseif g:foldsearch_scope == "window"
+  let s:Foldsearch_scope_id = function("win_getid")
+elseif g:foldsearch_scope == "buffer"
+  let s:Foldsearch_scope_id = function("bufnr")
+else
+  let s:Foldsearch_scope_id = function("win_getid")
+endif
+
+" initialize foldsearch_data {{{2
+let s:foldsearch_data = {}
+
+" initialize debug message buffer {{{2
+let s:foldsearch_debug_message = []
 
 " Section: Functions {{{1
 
@@ -296,7 +312,7 @@ endfunction
 " Get the foldsearch configuration for the user defined scope.
 "
 function s:GetConfig()
-  let scope = g:Foldsearch_scope_id()
+  let scope = s:Foldsearch_scope_id()
   if has_key(s:foldsearch_data, scope)
     call s:Debug(3, "use existing config")
     return s:foldsearch_data[scope]
@@ -322,7 +338,7 @@ endfunction
 " Set the foldsearch configuration for the user defined scope.
 "
 function s:SetConfig(config)
-  let s:foldsearch_data[g:Foldsearch_scope_id()] = a:config
+  let s:foldsearch_data[s:Foldsearch_scope_id()] = a:config
 endfunction
 
 " Function: s:Initialize(config) {{{2

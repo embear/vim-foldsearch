@@ -157,6 +157,7 @@ request or just tell me your ideas.
 vX.Y.Z : XXXX-XX-XX
 
   - add debug messages and functions to dump them on the screen or to a file.
+  - internal refactoring
 
 v1.3.1 : 2024-04-26
 

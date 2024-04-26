@@ -29,32 +29,6 @@ if !(v:version > 701 || (v:version == 701 && has("patch040")))
   finish
 endif
 
-" define default "foldsearch_highlight" {{{2
-if (!exists("g:foldsearch_highlight"))
-  let g:foldsearch_highlight = 0
-endif
-
-" define default "foldsearch_disable_mappings" {{{2
-if (!exists("g:foldsearch_disable_mappings"))
-  let g:foldsearch_disable_mappings = 0
-endif
-
-" define default "foldsearch_debug" {{{2
-if (!exists("g:foldsearch_debug"))
-  let g:foldsearch_debug = 0
-endif
-
-" define default "foldsearch_scope" {{{2
-if (!exists("g:foldsearch_scope"))
-  let g:Foldsearch_scope_id = function("win_getid")
-elseif g:foldsearch_scope == "window"
-  let g:Foldsearch_scope_id = function("win_getid")
-elseif g:foldsearch_scope == "buffer"
-  let g:Foldsearch_scope_id = function("bufnr")
-else
-  let g:Foldsearch_scope_id = function("win_getid")
-endif
-
 " Section: Commands {{{1
 
 command! -nargs=* -complete=command Fs call foldsearch#foldsearch#FoldSearch(<f-args>)
@@ -72,7 +46,7 @@ command! -nargs=1 FoldsearchDebugDump call foldsearch#foldsearch#FoldSearchDebug
 
 " Section: Mappings {{{1
 
-if !g:foldsearch_disable_mappings
+if !exists("g:foldsearch_disable_mappings") || !g:foldsearch_disable_mappings
    map <Leader>fs :call foldsearch#foldsearch#FoldSearch()<CR>
    map <Leader>fw :call foldsearch#foldsearch#FoldCword()<CR>
    map <Leader>fS :call foldsearch#foldsearch#FoldSpell()<CR>
