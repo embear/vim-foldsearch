@@ -373,12 +373,15 @@ function! s:Initialize(config)
     execute "mkview " . a:config.viewfile
     let &viewoptions = l:viewoptions
 
-    " for unnamed buffers, an 'enew' command gets added to the view which we
-    " need to filter out.
+    " alter commands in view file:
+    "   - add deletion of all folds that is missing for unnamed buffers
+    "   - remove 'enew' command that gets added for unnamed buffers
+    "   - remove 'doautoall' that might cause unwanted side effects
     let l:lines = readfile(a:config.viewfile)
     call s:Debug(3, "view file (unmodified): " . string(l:lines))
 
-    call filter(l:lines, 'v:val != "enew"')
+    call insert(l:lines, 'silent! normal! zE')
+    call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
     call writefile(l:lines, a:config.viewfile)
     call s:Debug(3, "view file (modified): " . string(l:lines))
@@ -528,10 +531,7 @@ function! s:UndoFolding(config)
 
   " restore the folds before foldsearch
   if (!empty(a:config.viewfile))
-    " for unnamed buffers manual folds are not stored in the view file and
-    " the view file also does not delete manual folds -> delete them manually
-    normal! zE
-
+    " restore folds
     execute "silent! noautocmd source " . a:config.viewfile
     call delete(a:config.viewfile)
     let a:config.viewfile = ''
