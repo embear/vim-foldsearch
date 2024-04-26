@@ -1,5 +1,5 @@
 " Name:    foldsearch.vim
-" Version: 1.3.0
+" Version: 1.3.1
 " Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin to fold away lines that don't match a pattern
 " Licence: This program is free software: you can redistribute it and/or modify

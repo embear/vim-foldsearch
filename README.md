@@ -126,6 +126,10 @@ request or just tell me your ideas.
 
 ## Changelog
 
+v1.3.1 : 2024-04-26
+
+  - bugfix: repeated call to `:Fe` removed folding markers in file
+
 v1.3.0 : 2024-04-25
 
   - add ability to toggle between foldsearch and original view with `:Ft`
