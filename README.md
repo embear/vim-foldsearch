@@ -65,6 +65,18 @@ Decrement *context* by one line.
 
 Set modified fold options to their previous value and end foldsearch.
 
+### The `:FoldsearchDebugShow` command
+
+Show debug messages. The debug level can be modified using the setting
+`g:foldsearch_debug`. The number of debug message lines is limited to the value
+of the setting `g:foldsearch_debug_lines`
+
+### The `:FoldsearchDebugDump` command
+
+Dump debug messages to given file. The debug level can be modified using the
+setting `g:foldsearch_debug`. The number of debug message lines is limited to
+the value of the setting `g:foldsearch_debug_lines`
+
 ## Mappings
 
   - `<Leader>fw` : `:Fw` with current context
@@ -111,6 +123,22 @@ window.
   - Value `buffer`: Use buffer scope to store data
   - Default: `window`
 
+### The `g:foldsearch_debug` setting
+
+Debug level for storing debug messages in an internal buffer.
+
+  - Value `0`: Don't store any debug message.
+  - Value > `1`: Store debug messages up to the given level
+  - Default: `0`
+
+### The `g:foldsearch_debug_lines` setting
+
+Number of debug messages stored in the internal buffer. If there are more debug
+messages than the given number then the oldest messages will be removed from
+the buffer.
+
+  - Default: `100`
+
 ## Contribute
 
 To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
@@ -125,6 +153,10 @@ request or just tell me your ideas.
   - Adam Szaj for the idea of different scopes
 
 ## Changelog
+
+vX.Y.Z : XXXX-XX-XX
+
+  - add debug messages and functions to dump them on the screen or to a file.
 
 v1.3.1 : 2024-04-26
 

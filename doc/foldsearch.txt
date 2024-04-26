@@ -15,11 +15,15 @@ Contents ~
   8. The |:Fi| command
   9. The |:Fd| command
   10. The |:Fe| command
+  11. The |:FoldsearchDebugShow| command
+  12. The |:FoldsearchDebugDump| command
  3. Mappings                                              |foldsearch-mappings|
  4. Settings                                              |foldsearch-settings|
   1. The |g:foldsearch_highlight| setting
   2. The |g:foldsearch_disable_mappings| setting
   3. The |g:foldsearch_scope| setting
+  4. The |g:foldsearch_debug| setting
+  5. The |g:foldsearch_debug_lines| setting
  5. Contribute                                          |foldsearch-contribute|
  6. Credits                                                |foldsearch-credits|
  7. Changelog                                            |foldsearch-changelog|
@@ -107,6 +111,20 @@ The *:Fe* command
 
 Set modified fold options to their previous value and end foldsearch.
 
+-------------------------------------------------------------------------------
+The *:FoldsearchDebugShow* command
+
+Show debug messages. The debug level can be modified using the setting
+|g:foldsearch_debug|. The number of debug message lines is limited to the value
+of the setting |g:foldsearch_debug_lines|
+
+-------------------------------------------------------------------------------
+The *:FoldsearchDebugDump* command
+
+Dump debug messages to given file. The debug level can be modified using the
+setting |g:foldsearch_debug|. The number of debug message lines is limited to
+the value of the setting |g:foldsearch_debug_lines|
+
 ===============================================================================
                                                           *foldsearch-mappings*
 Mappings ~
@@ -158,6 +176,24 @@ of foldsearch can be done for several buffers displayed in the same window.
 - Value 'window': Use window scope to store data
 - Value 'buffer': Use buffer scope to store data
 - Default: 'window'
+
+-------------------------------------------------------------------------------
+The *g:foldsearch_debug* setting
+
+Debug level for storing debug messages in an internal buffer.
+
+- Value '0': Don't store any debug message.
+- Value > '1': Store debug messages up to the given level
+- Default: '0'
+
+-------------------------------------------------------------------------------
+The *g:foldsearch_debug_lines* setting
+
+Number of debug messages stored in the internal buffer. If there are more debug
+messages than the given number then the oldest messages will be removed from
+the buffer.
+
+- Default: '100'
 
 ===============================================================================
                                                         *foldsearch-contribute*

@@ -18,8 +18,22 @@
 "
 " Section: Plugin header {{{1
 
-" initialize "foldsearch_data" {{{2
+" initialize foldsearch_data {{{2
 let s:foldsearch_data = {}
+
+" initialize debug message buffer {{{2
+let s:foldsearch_debug_message = []
+
+" define default "foldsearch_debug" {{{2
+if (!exists("g:foldsearch_debug"))
+  let g:foldsearch_debug = 0
+endif
+
+" define default "foldsearch_debug_lines" {{{2
+let s:foldsearch_debug_lines = 100
+if (exists("g:foldsearch_debug_lines"))
+  let s:foldsearch_debug_lines = g:foldsearch_debug_lines
+endif
 
 " Section: Functions {{{1
 
@@ -28,6 +42,8 @@ let s:foldsearch_data = {}
 " Search and fold the word under the cursor. Accept a optional context argument.
 "
 function! foldsearch#foldsearch#FoldCword(...)
+  call s:Debug(2, "BEGIN FoldCword()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -42,6 +58,8 @@ function! foldsearch#foldsearch#FoldCword(...)
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldCword()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearch(...) {{{2
@@ -49,6 +67,8 @@ endfunction
 " Search and fold the last search pattern. Accept a optional context argument.
 "
 function! foldsearch#foldsearch#FoldSearch(...)
+  call s:Debug(2, "BEGIN FoldSearch()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -63,6 +83,8 @@ function! foldsearch#foldsearch#FoldSearch(...)
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldSearch()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldPattern(pattern) {{{2
@@ -70,6 +92,8 @@ endfunction
 " Search and fold the given regular expression.
 "
 function! foldsearch#foldsearch#FoldPattern(pattern)
+  call s:Debug(2, "BEGIN FoldPattern()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -81,6 +105,8 @@ function! foldsearch#foldsearch#FoldPattern(pattern)
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldPattern()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSpell(...)  {{{2
@@ -88,12 +114,15 @@ endfunction
 " Do the search and folding based on spellchecker
 "
 function! foldsearch#foldsearch#FoldSpell(...)
+  call s:Debug(2, "BEGIN FoldSpell()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
   " if foldsearch_pattern is not defined, then exit
   if (!&spell)
-    echo "Spell checking not enabled, ending Foldsearch"
+    call s:Error("Spell checking not enabled, ending Foldsearch")
+    call s:Debug(2, "END FoldSpell()")
     return
   endif
 
@@ -117,7 +146,7 @@ function! foldsearch#foldsearch#FoldSpell(...)
 
   " report if pattern not found and thus no fold created
   if (empty(l:config.pattern))
-    echo "No spelling errors found!"
+    call s:Message("No spelling errors found!")
   else
     " determine the number of context lines
     call s:UpdateContext(l:config, a:000)
@@ -128,6 +157,8 @@ function! foldsearch#foldsearch#FoldSpell(...)
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldSpell()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldLast(...) {{{2
@@ -135,6 +166,8 @@ endfunction
 " Search and fold the last pattern
 "
 function! foldsearch#foldsearch#FoldLast()
+  call s:Debug(2, "BEGIN FoldLast()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -143,6 +176,8 @@ function! foldsearch#foldsearch#FoldLast()
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldLast()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldToggle() {{{2
@@ -150,6 +185,8 @@ endfunction
 " Toggle between fold search and saved view
 "
 function! foldsearch#foldsearch#FoldToggle()
+  call s:Debug(2, "BEGIN FoldToggle()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -161,6 +198,8 @@ function! foldsearch#foldsearch#FoldToggle()
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldToggle()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldEnd() {{{2
@@ -168,6 +207,8 @@ endfunction
 " End the fold search and restore the saved settings
 "
 function! foldsearch#foldsearch#FoldEnd()
+  call s:Debug(2, "BEGIN FoldEnd()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -176,6 +217,8 @@ function! foldsearch#foldsearch#FoldEnd()
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldEnd()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldSearchContext(...) {{{2
@@ -183,18 +226,22 @@ endfunction
 " Set the context of the folds to the given value
 "
 function! foldsearch#foldsearch#FoldSearchContext(...)
+  call s:Debug(2, "BEGIN FoldContext()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
   if (a:0 == 0)
     " if no new context is given display current and exit
-    echo "Foldsearch context: pre = ".l:config.context_pre." lines; post = ".l:config.context_post . " lines"
+    call s:Message("Foldsearch context: pre = ".l:config.context_pre." lines; post = ".l:config.context_post . " lines")
   else
     call s:UpdateContext(l:config, a:000)
   endif
 
   " call the folding function
   call s:DoFolding(l:config)
+
+  call s:Debug(2, "END FoldContext()")
 endfunction
 
 " Function: foldsearch#foldsearch#FoldContextAdd(change) {{{2
@@ -202,6 +249,8 @@ endfunction
 " Change the context of the folds by the given value.
 "
 function! foldsearch#foldsearch#FoldContextAdd(change)
+  call s:Debug(2, "BEGIN FoldContextAdd()")
+
   " get configuration for this scope
   let l:config = s:GetConfig()
 
@@ -220,6 +269,26 @@ function! foldsearch#foldsearch#FoldContextAdd(change)
 
   " save configuration for this scope
   call s:SetConfig(l:config)
+
+  call s:Debug(2, "END FoldContextAdd()")
+endfunction
+
+" Function: foldsearch#foldsearch#FoldSearchDebugShow() {{{2
+"
+" output stored debug messages to console
+"
+function! foldsearch#foldsearch#FoldSearchDebugShow()
+  for l:message in s:foldsearch_debug_message
+    echo l:message
+  endfor
+endfunction
+
+" Function: foldsearch#foldsearch#FoldSearchDebugDump(logfile) {{{2
+"
+" output stored debug message to file
+"
+function! foldsearch#foldsearch#FoldSearchDebugDump(logfile)
+  call writefile(s:foldsearch_debug_message, a:logfile, "s")
 endfunction
 
 " Function: s:GetConfig() {{{2
@@ -229,8 +298,10 @@ endfunction
 function s:GetConfig()
   let scope = g:Foldsearch_scope_id()
   if has_key(s:foldsearch_data, scope)
+    call s:Debug(3, "use existing config")
     return s:foldsearch_data[scope]
   else
+    call s:Debug(3, "initialize config")
     return {
           \ 'active' : 0,
           \ 'pattern' : '',
@@ -259,6 +330,8 @@ endfunction
 " Initialize fold searching for current buffer in given config
 "
 function! s:Initialize(config)
+  call s:Debug(2, "BEGIN Initialize()")
+
   " save current setup
   if (empty(a:config.viewfile))
     " save user settings before making changes
@@ -287,12 +360,18 @@ function! s:Initialize(config)
     " for unnamed buffers, an 'enew' command gets added to the view which we
     " need to filter out.
     let l:lines = readfile(a:config.viewfile)
+    call s:Debug(3, "view file (unmodified): " . string(l:lines))
+
     call filter(l:lines, 'v:val != "enew"')
+
     call writefile(l:lines, a:config.viewfile)
+    call s:Debug(3, "view file (modified): " . string(l:lines))
   endif
 
   " delete all manual folds to get a clean starting point
   normal! zE
+
+  call s:Debug(2, "END Initialize()")
 endfunction
 
 " Function: s:UpdateContext(config, ...) {{{2
@@ -300,6 +379,8 @@ endfunction
 " Update the context in the given config
 "
 function! s:UpdateContext(config, args)
+  call s:Debug(2, "BEGIN UpdateContext()")
+
   let idx = 0
   while idx < len(a:args)
     if (strpart(a:args[idx], 0, 1) == "-")
@@ -319,6 +400,8 @@ function! s:UpdateContext(config, args)
   if (a:config.context_post < 0)
     let a:config.context_post = 0
   endif
+
+  call s:Debug(2, "END UpdateContext()")
 endfunction
 
 " Function: s:DoFolding(config)  {{{2
@@ -327,9 +410,11 @@ endfunction
 " config.context
 "
 function! s:DoFolding(config)
+  call s:Debug(2, "BEGIN DoFolding()")
   " if foldsearch_pattern is not defined, then exit
   if (empty(a:config.pattern))
-    echo "No search pattern defined, ending fold search"
+    call s:Error("No search pattern defined, ending fold search")
+    call s:Debug(2, "END DoFolding()")
     return
   endif
 
@@ -398,11 +483,11 @@ function! s:DoFolding(config)
 
   " report if pattern not found and thus no fold created
   if (pattern_found == 0)
-    echo "Pattern not found!"
+    call s:Message("Pattern not found!")
   elseif (fold_created == 0)
-    echo "No folds created"
+    call s:Message("No folds created")
   else
-    echo "Foldsearch done"
+    call s:Message("Foldsearch done")
   endif
 
   " restore position before folding
@@ -410,6 +495,9 @@ function! s:DoFolding(config)
 
   " signal currently active fold search
   let a:config.active = 1
+
+  call s:Debug(3, "config: " . string(a:config))
+  call s:Debug(2, "END DoFolding()")
 endfunction
 
 " Function: s:UndoFolding(config) {{{2
@@ -417,6 +505,8 @@ endfunction
 " End the fold search and restore the saved settings
 "
 function! s:UndoFolding(config)
+  call s:Debug(2, "BEGIN UndoFolding()")
+
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
@@ -444,13 +534,37 @@ function! s:UndoFolding(config)
   endif
 
   " give a message to the user
-  echo "Foldsearch ended"
+  call s:Message("Foldsearch ended")
 
   " restore position before folding
   execute cursor_position
 
   " signal currently inactive fold search
   let a:config.active = 0
+
+  call s:Debug(2, "END UndoFolding()")
+endfunction
+
+" Function: s:Message(text) {{{2
+"
+" output normal user message
+"
+function! s:Message(text)
+  echo a:text
+
+  " put every message to the debug message array
+  call s:Debug(1, a:text)
+endfunction
+
+" Function: s:Error(text) {{{2
+"
+" output error message
+"
+function! s:Error(text)
+  echohl ErrorMsg | echom a:text | echohl None
+
+  " put every error message to the debug message array
+  call s:Debug(1, a:text)
 endfunction
 
 " Function: s:Debug(level, text) {{{2
@@ -459,7 +573,18 @@ endfunction
 "
 function! s:Debug(level, text)
   if (g:foldsearch_debug >= a:level)
-    echom "foldsearch: " . a:text
+    " print stacktrace for levels above 10
+    if (g:foldsearch_debug >= 10)
+      call add(s:foldsearch_debug_message, "lvl X: stacktrace " . expand('<sfile>'))
+    endif
+
+    " actual message
+    call add(s:foldsearch_debug_message, "lvl " . a:level . ": " . a:text)
+
+    " if the list is too long remove the first element
+    if len(s:foldsearch_debug_message) > s:foldsearch_debug_lines
+      call remove(s:foldsearch_debug_message, 0)
+    endif
   endif
 endfunction
 

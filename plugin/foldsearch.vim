@@ -67,6 +67,8 @@ command! -nargs=* Fc call foldsearch#foldsearch#FoldSearchContext(<f-args>)
 command! -nargs=0 Fi call foldsearch#foldsearch#FoldContextAdd(+1)
 command! -nargs=0 Fd call foldsearch#foldsearch#FoldContextAdd(-1)
 command! -nargs=0 Fe call foldsearch#foldsearch#FoldEnd()
+command! -nargs=0 FoldsearchDebugShow call foldsearch#foldsearch#FoldSearchDebugShow()
+command! -nargs=1 FoldsearchDebugDump call foldsearch#foldsearch#FoldSearchDebugDump(<q-args>)
 
 " Section: Mappings {{{1
 
