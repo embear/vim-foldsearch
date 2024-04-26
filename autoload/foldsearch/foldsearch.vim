@@ -420,12 +420,12 @@ function! s:UndoFolding(config)
   " save cursor position
   let cursor_position = line(".") . "normal!" . virtcol(".") . "|"
 
-  " for unnamed buffers manual folds are not stored in the view file and
-  " the view file also does not delete manual folds -> delete them manually
-  normal! zE
-
   " restore the folds before foldsearch
   if (!empty(a:config.viewfile))
+    " for unnamed buffers manual folds are not stored in the view file and
+    " the view file also does not delete manual folds -> delete them manually
+    normal! zE
+
     execute "silent! noautocmd source " . a:config.viewfile
     call delete(a:config.viewfile)
     let a:config.viewfile = ''
