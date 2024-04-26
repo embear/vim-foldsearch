@@ -324,10 +324,6 @@ function s:GetConfig()
           \ 'context_pre': 0,
           \ 'context_post': 0,
           \ 'viewfile': '',
-          \ 'foldtext': '',
-          \ 'foldmethod': '',
-          \ 'foldenable': '',
-          \ 'foldminlines': '',
           \ 'highlight_id': '',
           \ }
   endif
@@ -350,22 +346,10 @@ function! s:Initialize(config)
 
   " save current setup
   if (empty(a:config.viewfile))
-    " save user settings before making changes
-    let a:config.foldtext = &foldtext
-    let a:config.foldmethod = &foldmethod
-    let a:config.foldenable = &foldenable
-    let a:config.foldminlines = &foldminlines
-
-    " modify settings
-    let &foldtext = ""
-    let &foldmethod = "manual"
-    let &foldenable = 1
-    let &foldminlines = 0
-
     " create a file for view options
     let a:config.viewfile = tempname()
 
-    " make a view of the current file for later restore of manual folds
+    " make a view of the current file for later restoring fold settings and  manual folds
     " NOTE: for unnamed buffers the view files does not store manually created
     "       folds and they will be lost!
     let l:viewoptions = &viewoptions
@@ -374,17 +358,25 @@ function! s:Initialize(config)
     let &viewoptions = l:viewoptions
 
     " alter commands in view file:
+    "   - add current foldtext setting that is not automatically stored
     "   - add deletion of all folds that is missing for unnamed buffers
     "   - remove 'enew' command that gets added for unnamed buffers
     "   - remove 'doautoall' that might cause unwanted side effects
     let l:lines = readfile(a:config.viewfile)
     call s:Debug(3, "view file (unmodified): " . string(l:lines))
 
+    call insert(l:lines, 'setlocal fdt='.&foldtext, -1)
     call insert(l:lines, 'silent! normal! zE')
     call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
     call writefile(l:lines, a:config.viewfile)
     call s:Debug(3, "view file (modified): " . string(l:lines))
+
+    " modify settings
+    let &foldtext = ""
+    let &foldmethod = "manual"
+    let &foldenable = 1
+    let &foldminlines = 0
   endif
 
   " delete all manual folds to get a clean starting point
@@ -535,12 +527,6 @@ function! s:UndoFolding(config)
     execute "silent! noautocmd source " . a:config.viewfile
     call delete(a:config.viewfile)
     let a:config.viewfile = ''
-
-    " restore user settings before making changes
-    let &foldtext = a:config.foldtext
-    let &foldmethod = a:config.foldmethod
-    let &foldenable = a:config.foldenable
-    let &foldminlines = a:config.foldminlines
   endif
 
   " delete highlighting
