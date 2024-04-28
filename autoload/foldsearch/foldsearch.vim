@@ -369,7 +369,7 @@ function! s:Initialize(config)
     call insert(l:lines, 'silent! normal! zE')
     call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
-    call writefile(l:lines, a:config.viewfile)
+    call writefile(l:lines, a:config.viewfile, "S")
     call s:Debug(3, "view file (modified):", l:lines)
 
     " modify settings

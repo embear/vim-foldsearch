@@ -158,6 +158,7 @@ vX.Y.Z : XXXX-XX-XX
 
   - add debug messages and functions to dump them on the screen or to a file.
   - internal refactoring
+  - performance improvements
 
 v1.3.1 : 2024-04-26
 
