@@ -524,7 +524,7 @@ function! s:UndoFolding(config)
   " restore the folds before foldsearch
   if (!empty(a:config.viewfile))
     " restore folds
-    execute "silent! noautocmd source " . a:config.viewfile
+    execute "silent! source " . a:config.viewfile
     call delete(a:config.viewfile)
     let a:config.viewfile = ''
   endif

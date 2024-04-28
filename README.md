@@ -156,9 +156,10 @@ request or just tell me your ideas.
 
 vX.Y.Z : XXXX-XX-XX
 
-  - add debug messages and functions to dump them on the screen or to a file.
-  - internal refactoring
+  - add debug messages and functions to dump them on the screen or to a file
+  - internal refactoring (modify and extend view file instead of storing data in additional variables)
   - performance improvements
+  - bugfix: enable autocommands during restoring previous view again to fix a bug with disabled syntax highlighting after ending foldsearch.
 
 v1.3.1 : 2024-04-26
 
