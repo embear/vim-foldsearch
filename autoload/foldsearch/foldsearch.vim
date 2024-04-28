@@ -363,14 +363,14 @@ function! s:Initialize(config)
     "   - remove 'enew' command that gets added for unnamed buffers
     "   - remove 'doautoall' that might cause unwanted side effects
     let l:lines = readfile(a:config.viewfile)
-    call s:Debug(3, "view file (unmodified): " . string(l:lines))
+    call s:Debug(3, "view file (unmodified):", l:lines)
 
     call insert(l:lines, 'setlocal fdt='.&foldtext, -1)
     call insert(l:lines, 'silent! normal! zE')
     call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
     call writefile(l:lines, a:config.viewfile)
-    call s:Debug(3, "view file (modified): " . string(l:lines))
+    call s:Debug(3, "view file (modified):", l:lines)
 
     " modify settings
     let &foldtext = ""
@@ -507,7 +507,7 @@ function! s:DoFolding(config)
   " signal currently active fold search
   let a:config.active = 1
 
-  call s:Debug(3, "config: " . string(a:config))
+  call s:Debug(3, "config:", a:config)
   call s:Debug(2, "END DoFolding()")
 endfunction
 
@@ -573,15 +573,24 @@ endfunction
 "
 " output debug message, if this message has high enough importance
 "
-function! s:Debug(level, text)
+function! s:Debug(level, ...)
   if (g:foldsearch_debug >= a:level)
     " print stacktrace for levels above 10
     if (g:foldsearch_debug >= 10)
       call add(s:foldsearch_debug_message, "lvl X: stacktrace " . expand('<sfile>'))
     endif
 
+    let l:output ="lvl " . a:level . ":"
+    for arg in a:000
+      if type(arg) != type("")
+        let l:output .= " " . string(arg)
+      else
+        let l:output .= " " . arg
+      endif
+    endfor
+
     " actual message
-    call add(s:foldsearch_debug_message, "lvl " . a:level . ": " . a:text)
+    call add(s:foldsearch_debug_message, output)
 
     " if the list is too long remove the first element
     if len(s:foldsearch_debug_message) > s:foldsearch_debug_lines
