@@ -217,6 +217,15 @@ Credits ~
                                                          *foldsearch-changelog*
 Changelog ~
 
+v1.3.2 : 2024-05-02
+
+- add debug messages and functions to dump them on the screen or to a file
+- internal refactoring (modify and extend view file instead of storing data
+  in additional variables)
+- performance improvements
+- bugfix: enable autocommands during restoring previous view again to fix a
+  bug with disabled syntax highlighting after ending foldsearch.
+
 v1.3.1 : 2024-04-26
 
 - bugfix: repeated call to |:Fe| removed folding markers in file
