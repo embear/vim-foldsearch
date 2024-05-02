@@ -365,8 +365,13 @@ function! s:Initialize(config)
     let l:lines = readfile(a:config.viewfile)
     call s:Debug(3, "view file (unmodified):", l:lines)
 
-    call insert(l:lines, 'setlocal fdt='.&foldtext, -1)
+    " prepend line(s)
     call insert(l:lines, 'silent! normal! zE')
+
+    " append line(s)
+    call insert(l:lines, 'setlocal fdt='.&foldtext, -1)
+
+    " delete line(s)
     call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
     call writefile(l:lines, a:config.viewfile, "S")
