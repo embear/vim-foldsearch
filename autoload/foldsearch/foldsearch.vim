@@ -586,11 +586,11 @@ function! s:Debug(level, ...)
     endif
 
     let l:output = "lvl " . a:level . ":"
-    for arg in a:000
-      if type(arg) != type("")
-        let l:output .= string(arg)
+    for Arg in a:000
+      if type(Arg) != type("")
+        let l:output .= string(Arg)
       else
-        let l:output .= arg
+        let l:output .= Arg
       endif
     endfor
 
