@@ -154,6 +154,10 @@ request or just tell me your ideas.
 
 ## Changelog
 
+vX.Y.Z : XXXX-XX-XX
+
+  - add unit tests
+
 v1.3.2 : 2024-05-02
 
   - add debug messages and functions to dump them on the screen or to a file

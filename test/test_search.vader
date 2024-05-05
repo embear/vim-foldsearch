@@ -1,0 +1,49 @@
+# test folding by search pattern
+Given (sample text):
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  bar
+  bar
+  foo
+  bar
+  bar
+  foo
+  foo
+
+After:
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (try folding not existing search pattern):
+  let @/="baz"
+  call foldsearch#foldsearch#FoldSearch()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (foldsearch search pattern):
+  let @/="bar"
+  call foldsearch#foldsearch#FoldSearch()
+
+Then (check expected folds):
+  let expected = [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold search pattern and end foldsearch):
+  let @/="bar"
+  call foldsearch#foldsearch#FoldSearch()
+  call foldsearch#foldsearch#FoldEnd()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected

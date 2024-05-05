@@ -1,0 +1,51 @@
+# test folding by spelling errors
+Given (sample text):
+  worng
+  worng
+  worng
+  worng
+  right
+  right
+  worng
+  worng
+  worng
+  right
+  right
+  worng
+  right
+  right
+  worng
+  worng
+
+After:
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (try folding with disabled spell checking):
+  call foldsearch#foldsearch#FoldSpell()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual len(expected), len(actual)
+  AssertEqual actual, expected
+
+Execute (fold spell errors):
+  execute ":setlocal spell spelllang=en_us"
+  call foldsearch#foldsearch#FoldSpell()
+
+Then (check expected folds):
+  let expected = [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual len(expected), len(actual)
+  AssertEqual actual, expected
+
+Execute (fold spell errors and end foldsearch):
+  execute ":setlocal spell spelllang=en_us"
+  call foldsearch#foldsearch#FoldSpell()
+  call foldsearch#foldsearch#FoldEnd()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual len(expected), len(actual)
+  AssertEqual actual, expected

@@ -1,0 +1,91 @@
+# test changing context
+Given (sample text):
+  foo
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  bar
+  foo
+  foo
+  foo
+
+Before(create basic folding):
+  call foldsearch#foldsearch#FoldPattern("bar")
+
+After(clear context):
+  call foldsearch#foldsearch#FoldContext("0")
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (fold with no context):
+  call foldsearch#foldsearch#FoldContext("0")
+
+Then (check expected folds):
+  let expected = [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with symmetic context):
+  call foldsearch#foldsearch#FoldContext("2")
+
+Then (check expected folds):
+  let expected = [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with previous context):
+  call foldsearch#foldsearch#FoldContext("2")
+  call foldsearch#foldsearch#FoldToggle()
+  call foldsearch#foldsearch#FoldToggle()
+
+Then (check expected folds):
+  let expected = [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with pre-context):
+  call foldsearch#foldsearch#FoldContext("-1")
+
+Then (check expected folds):
+  let expected = [1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with post-context):
+  call foldsearch#foldsearch#FoldContext("+2")
+
+Then (check expected folds):
+  let expected = [1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with pre- and post-context):
+  call foldsearch#foldsearch#FoldContext("-2", "+1")
+
+Then (check expected folds):
+  let expected = [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with context that leaves no folds):
+  call foldsearch#foldsearch#FoldContext("-3", "+3")
+
+Then (check expected folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold with overlapping context):
+  call foldsearch#foldsearch#FoldContext("-8", "+5")
+
+Then (check expected folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected

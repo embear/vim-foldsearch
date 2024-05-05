@@ -1,0 +1,62 @@
+# test restoration of manual folds after ending a foldsearch
+Given (sample text):
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  bar
+  bar
+  foo
+  foo
+  foo
+
+Before (create manual folds):
+  let &buftype = "" " force Vim to store folds in view file
+  let &foldmethod = "manual"
+  execute("4,5fold")
+  execute("13,14fold")
+
+After:
+  AssertEqual &foldmethod, "manual"
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (open all manual folds):
+  normal zR
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (close all manual folds):
+  normal zM
+
+Then (check expected folds):
+  let expected = [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold pattern):
+  call foldsearch#foldsearch#FoldPattern("bar")
+
+Then (check expected folds):
+  let expected = [1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold pattern and end foldsearch):
+  normal zM
+  call foldsearch#foldsearch#FoldPattern("bar")
+  call foldsearch#foldsearch#FoldEnd()
+
+Then (check restored manual folds):
+  let expected = [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected

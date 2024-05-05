@@ -1,0 +1,40 @@
+# test repeating last folding
+Given (sample text):
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  bar
+  bar
+  foo
+  foo
+  foo
+
+After:
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (fold pattern and end foldsearch):
+  call foldsearch#foldsearch#FoldPattern("bar")
+  call foldsearch#foldsearch#FoldEnd()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold last pattern):
+  call foldsearch#foldsearch#FoldPattern("bar")
+  call foldsearch#foldsearch#FoldEnd()
+  call foldsearch#foldsearch#FoldLast()
+
+Then (check expected folds):
+  let expected = [1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected

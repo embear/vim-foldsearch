@@ -1,0 +1,40 @@
+# test foldsearch for current word
+Given (sample text):
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  bar
+  bar
+  bar
+  bar
+  foo
+  foo
+  foo
+
+After:
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (fold current word):
+  normal 4G
+  call foldsearch#foldsearch#FoldCword()
+
+Then (check expected folds):
+  let expected = [0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
+
+Execute (fold current word and end foldsearch):
+  normal 4G
+  call foldsearch#foldsearch#FoldCword()
+  call foldsearch#foldsearch#FoldEnd()
+
+Then (expect no folds):
+  let expected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  let actual = map(range(1, line("$")), 'foldclosed(v:val) > 0')
+  AssertEqual actual, expected
