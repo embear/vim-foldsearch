@@ -156,6 +156,7 @@ request or just tell me your ideas.
 
 vX.Y.Z : XXXX-XX-XX
 
+  - rename internal function FoldSearchContext() -> FoldContext()
   - add unit tests
 
 v1.3.2 : 2024-05-02

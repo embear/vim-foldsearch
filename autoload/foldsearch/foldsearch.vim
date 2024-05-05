@@ -237,11 +237,11 @@ function! foldsearch#foldsearch#FoldEnd()
   call s:Debug(2, "END FoldEnd()")
 endfunction
 
-" Function: foldsearch#foldsearch#FoldSearchContext(...) {{{2
+" Function: foldsearch#foldsearch#FoldContext(...) {{{2
 "
 " Set the context of the folds to the given value
 "
-function! foldsearch#foldsearch#FoldSearchContext(...)
+function! foldsearch#foldsearch#FoldContext(...)
   call s:Debug(2, "BEGIN FoldContext()")
 
   " get configuration for this scope
