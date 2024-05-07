@@ -357,21 +357,27 @@ function! s:Initialize(config)
     execute "mkview " . a:config.viewfile
     let &viewoptions = l:viewoptions
 
-    " alter commands in view file:
-    "   - add current foldtext setting that is not automatically stored
-    "   - add deletion of all folds that is missing for unnamed buffers
-    "   - remove 'enew' command that gets added for unnamed buffers
-    "   - remove 'doautoall' that might cause unwanted side effects
     let l:lines = readfile(a:config.viewfile)
     call s:Debug(3, "view file (unmodified): ", l:lines)
 
-    " prepend line(s)
+    " prepend line(s):
+    "   - add deletion of all folds that is missing for unnamed buffers
     call insert(l:lines, 'silent! normal! zE')
 
-    " append line(s)
+    " append line(s):
+    "   - add current foldtext setting that is not automatically stored
+    "   - force correct setting of foldenable (might be wrong due to folding
+    "     commands in the view file)
     call insert(l:lines, 'setlocal fdt='.&foldtext, -1)
+    if &foldenable == 0
+      call insert(l:lines, 'setlocal nofen', -1)
+    else
+      call insert(l:lines, 'setlocal fen', -1)
+    endif
 
-    " delete line(s)
+    " delete line(s):
+    "   - remove 'enew' command that gets added for unnamed buffers
+    "   - remove 'doautoall' that might cause unwanted side effects
     call filter(l:lines, 'v:val !~# "\\(^enew\\|^doautoall\\)"')
 
     call writefile(l:lines, a:config.viewfile, "S")
