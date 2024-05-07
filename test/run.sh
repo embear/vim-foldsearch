@@ -5,12 +5,13 @@ BASEDIR=$(readlink -f "$(dirname $(dirname $0))")
 # get latest vader
 if [ ! -s ${BASEDIR}/test/vader ]
 then
-  echo "getting sources ..."
+  echo -n "getting vader ... "
   git clone --depth=1 https://github.com/junegunn/vader.vim.git ${BASEDIR}/test/vader >/dev/null 2>&1
+  echo "DONE"
 fi
 
 # run the tests
-echo "running tests ..."
+echo -n "running tests ... "
 OUTPUT=$(vim -Nu <(cat << VIMRC
 filetype off
 set rtp+=${BASEDIR}
@@ -23,12 +24,11 @@ RC=$?
 
 if [ ${RC} -ne 0 ]
 then
+  echo "[0;31mFAILED[0m"
+  echo
   echo "${OUTPUT}"
-  echo
-  echo "FAILED"
-  echo
 else
-  echo "SUCCESS"
+  echo "DONE"
 fi
 
 exit ${RC}
