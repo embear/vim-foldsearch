@@ -27,7 +27,6 @@ Execute (change settings from defaults):
   execute("13,14fold")
   call foldsearch#foldsearch#FoldPattern("bar")
   call foldsearch#foldsearch#FoldEnd()
-  " call foldsearch#foldsearch#FoldSearchDebugDump("/tmp/dump")
 
 Then (check expected settings):
   AssertEqual &foldtext, getline(v:foldstart)

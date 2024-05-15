@@ -1,0 +1,49 @@
+# test highlight option is working
+Given (sample text):
+  foo
+  foo
+  bar
+  bar
+  foo
+  foo
+  foo
+  foo
+  foo
+  bar
+  bar
+  bar
+  bar
+  foo
+  foo
+  foo
+
+After (make sure foldsearch is ended):
+  call foldsearch#foldsearch#FoldEnd()
+
+Execute (fold a pattern with highlighting):
+  let g:foldsearch_highlight = 1
+  call foldsearch#foldsearch#FoldPattern("bar")
+
+Then (check that pattern is part of matches):
+  let found = 0
+  for match in getmatches()
+    if match.pattern =~# '\<bar$' && match.group == 'Search'
+      let found = 1
+    endif
+  endfor
+  Assert found == 1
+  redraw " clear 'echo' messages by forced redraw
+
+Execute (fold a pattern without highlighting):
+  let g:foldsearch_highlight = 0
+  call foldsearch#foldsearch#FoldPattern("bar")
+
+Then (check that pattern is not part of matches):
+  let found = 0
+  for match in getmatches()
+    if match.pattern =~# '\<bar$' && match.group == 'Search'
+      let found = 1
+    endif
+  endfor
+  Assert found == 0
+  redraw " clear 'echo' messages by forced redraw
